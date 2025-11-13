@@ -55,7 +55,9 @@
         "boosted": "Boosted",
         "addComment": "Add a comment...",
         "noComments": "No comments yet",
-        "contactSeller": "Contact Seller"
+        "contactSeller": "Contact Seller",
+        "startChat": "Start Chat",
+        "chatAboutPost": "Hi! I'm interested in your post:"
     },
     "profile": {
         "editProfile": "Edit Profile",

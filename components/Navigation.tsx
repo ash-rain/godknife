@@ -3,13 +3,15 @@
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { useLanguage } from './LanguageProvider'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Menu, X, MessageSquare, User, Settings, LogOut } from 'lucide-react'
 
 export default function Navigation() {
     const { data: session } = useSession()
     const { t, language, setLanguage } = useLanguage()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const [profileMenuOpen, setProfileMenuOpen] = useState(false)
+    const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
     return (
         <nav className="bg-white shadow-sm">
@@ -57,7 +59,21 @@ export default function Navigation() {
                                     <MessageSquare className="h-5 w-5" />
                                 </Link>
 
-                                <div className="relative group">
+                                <div
+                                    className="relative"
+                                    onMouseEnter={() => {
+                                        if (closeTimeoutRef.current) {
+                                            clearTimeout(closeTimeoutRef.current)
+                                            closeTimeoutRef.current = null
+                                        }
+                                        setProfileMenuOpen(true)
+                                    }}
+                                    onMouseLeave={() => {
+                                        closeTimeoutRef.current = setTimeout(() => {
+                                            setProfileMenuOpen(false)
+                                        }, 200)
+                                    }}
+                                >
                                     <button className="flex items-center space-x-2">
                                         <img
                                             src={session.user?.image || '/default-avatar.png'}
@@ -66,31 +82,33 @@ export default function Navigation() {
                                         />
                                     </button>
 
-                                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block">
-                                        <Link
-                                            href={`/u/${session.user?.username}`}
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                        >
-                                            <User className="inline h-4 w-4 mr-2" />
-                                            {t('nav.profile')}
-                                        </Link>
-                                        {session.user?.isAdmin && (
+                                    {profileMenuOpen && (
+                                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                                             <Link
-                                                href="/admin"
+                                                href={`/u/${session.user?.username}`}
                                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                             >
-                                                <Settings className="inline h-4 w-4 mr-2" />
-                                                {t('nav.admin')}
+                                                <User className="inline h-4 w-4 mr-2" />
+                                                {t('nav.profile')}
                                             </Link>
-                                        )}
-                                        <button
-                                            onClick={() => signOut()}
-                                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                        >
-                                            <LogOut className="inline h-4 w-4 mr-2" />
-                                            {t('common.logout')}
-                                        </button>
-                                    </div>
+                                            {session.user?.isAdmin && (
+                                                <Link
+                                                    href="/admin"
+                                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                >
+                                                    <Settings className="inline h-4 w-4 mr-2" />
+                                                    {t('nav.admin')}
+                                                </Link>
+                                            )}
+                                            <button
+                                                onClick={() => signOut()}
+                                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            >
+                                                <LogOut className="inline h-4 w-4 mr-2" />
+                                                {t('common.logout')}
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </>
                         ) : (
