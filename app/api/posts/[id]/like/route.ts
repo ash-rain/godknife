@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function POST(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth()
@@ -12,12 +12,13 @@ export async function POST(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
+        const { id } = await params
         // Check if already liked
         const existingLike = await prisma.like.findUnique({
             where: {
                 userId_postId: {
                     userId: session.user.id,
-                    postId: params.id,
+                    postId: id,
                 },
             },
         })
@@ -28,7 +29,7 @@ export async function POST(
                 where: {
                     userId_postId: {
                         userId: session.user.id,
-                        postId: params.id,
+                        postId: id,
                     },
                 },
             })
@@ -38,7 +39,7 @@ export async function POST(
             await prisma.like.create({
                 data: {
                     userId: session.user.id,
-                    postId: params.id,
+                    postId: id,
                 },
             })
             return NextResponse.json({ liked: true })
@@ -54,7 +55,7 @@ export async function POST(
 
 export async function GET(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth()
@@ -63,11 +64,12 @@ export async function GET(
             return NextResponse.json({ liked: false })
         }
 
+        const { id } = await params
         const like = await prisma.like.findUnique({
             where: {
                 userId_postId: {
                     userId: session.user.id,
-                    postId: params.id,
+                    postId: id,
                 },
             },
         })

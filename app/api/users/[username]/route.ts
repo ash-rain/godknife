@@ -4,11 +4,12 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(
     req: NextRequest,
-    { params }: { params: { username: string } }
+    { params }: { params: Promise<{ username: string }> }
 ) {
     try {
+        const { username } = await params
         const user = await prisma.user.findUnique({
-            where: { username: params.username },
+            where: { username },
             select: {
                 id: true,
                 name: true,
@@ -44,7 +45,7 @@ export async function GET(
 
 export async function PUT(
     req: NextRequest,
-    { params }: { params: { username: string } }
+    { params }: { params: Promise<{ username: string }> }
 ) {
     try {
         const session = await auth()
@@ -52,8 +53,9 @@ export async function PUT(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
+        const { username } = await params
         const user = await prisma.user.findUnique({
-            where: { username: params.username },
+            where: { username },
         })
 
         if (!user || user.id !== session.user.id) {

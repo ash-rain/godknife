@@ -30,16 +30,20 @@ export default function PostCard({ post }: PostCardProps) {
         <Link href={`/posts/${post.id}`}>
             <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer">
                 {post.isBoosted && (
-                    <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-3 py-1">
+                    <div className="bg-linear-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-3 py-1">
                         ⭐ {t('post.boosted')}
                     </div>
                 )}
 
-                <div className="aspect-square relative">
+                <div className="aspect-square relative bg-gray-100">
                     <img
                         src={imageUrl}
                         alt={post.title}
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                            const target = e.target as HTMLImageElement
+                            target.src = '/placeholder.jpg'
+                        }}
                     />
                 </div>
 

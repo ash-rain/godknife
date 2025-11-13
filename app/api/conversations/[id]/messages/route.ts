@@ -5,7 +5,7 @@ import { pusherServer } from '@/lib/pusher'
 
 export async function GET(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth()
@@ -13,10 +13,11 @@ export async function GET(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
+        const { id } = await params
         // Verify user is participant
         const participant = await prisma.conversationParticipant.findFirst({
             where: {
-                conversationId: params.id,
+                conversationId: id,
                 userId: session.user.id,
             },
         })
@@ -26,7 +27,7 @@ export async function GET(
         }
 
         const messages = await prisma.message.findMany({
-            where: { conversationId: params.id },
+            where: { conversationId: id },
             orderBy: { createdAt: 'asc' },
             include: {
                 sender: {
@@ -58,7 +59,7 @@ export async function GET(
 
 export async function POST(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth()
@@ -66,10 +67,11 @@ export async function POST(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
+        const { id } = await params
         // Verify user is participant
         const participant = await prisma.conversationParticipant.findFirst({
             where: {
-                conversationId: params.id,
+                conversationId: id,
                 userId: session.user.id,
             },
         })
@@ -92,7 +94,7 @@ export async function POST(
             data: {
                 content,
                 senderId: session.user.id,
-                conversationId: params.id,
+                conversationId: id,
             },
             include: {
                 sender: {
@@ -108,13 +110,13 @@ export async function POST(
 
         // Update conversation timestamp
         await prisma.conversation.update({
-            where: { id: params.id },
+            where: { id },
             data: { updatedAt: new Date() },
         })
 
         // Send real-time notification via Pusher
         await pusherServer.trigger(
-            `conversation-${params.id}`,
+            `conversation-${id}`,
             'new-message',
             message
         )
