@@ -48,6 +48,8 @@
         "like": "Like",
         "comment": "Comment",
         "share": "Share",
+        "noPosts": "No posts yet",
+        "noPostsDescription": "Be the first to share something amazing!",
         "views": "Views",
         "comments": "Comments",
         "likes": "Likes",

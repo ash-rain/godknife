@@ -7,7 +7,50 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 
+// Helper function to generate a unique username
+async function generateUniqueUsername(name: string | null): Promise<string> {
+    // Create base username from name
+    let baseUsername = 'user'
+    if (name) {
+        // Remove special characters and spaces, convert to lowercase
+        baseUsername = name
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, '')
+            .substring(0, 15) // Limit length
+    }
+
+    // If base is empty, use 'user'
+    if (!baseUsername) {
+        baseUsername = 'user'
+    }
+
+    // Try to find available username
+    let username = baseUsername
+    let attempts = 0
+    const maxAttempts = 10
+
+    while (attempts < maxAttempts) {
+        // Check if username exists
+        const existingUser = await prisma.user.findUnique({
+            where: { username }
+        })
+
+        if (!existingUser) {
+            return username
+        }
+
+        // Generate random 4-digit number
+        const randomNum = Math.floor(1000 + Math.random() * 9000)
+        username = `${baseUsername}${randomNum}`
+        attempts++
+    }
+
+    // Fallback: use timestamp
+    return `${baseUsername}${Date.now().toString().slice(-6)}`
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
+    debug: process.env.NODE_ENV === 'development',
     adapter: PrismaAdapter(prisma),
     providers: [
         GoogleProvider({
@@ -69,6 +112,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         error: "/auth/error",
     },
     callbacks: {
+        async signIn({ user, account }) {
+            // Auto-generate username for new OAuth users
+            if (account?.provider !== 'credentials' && user.id) {
+                const existingUser = await prisma.user.findUnique({
+                    where: { id: user.id },
+                    select: { username: true, name: true }
+                })
+
+                if (existingUser && !existingUser.username) {
+                    const newUsername = await generateUniqueUsername(existingUser.name)
+                    await prisma.user.update({
+                        where: { id: user.id },
+                        data: { username: newUsername }
+                    })
+                }
+            }
+            return true
+        },
         async jwt({ token, user }) {
             if (user) {
                 token.id = user.id
@@ -86,11 +147,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                         username: true,
                         isAdmin: true,
                         postCredits: true,
+                        name: true,
                     },
                 })
 
                 if (userData) {
-                    session.user.username = userData.username
+                    // Auto-generate username if not exists
+                    if (!userData.username) {
+                        const newUsername = await generateUniqueUsername(userData.name)
+                        await prisma.user.update({
+                            where: { id: token.id as string },
+                            data: { username: newUsername }
+                        })
+                        session.user.username = newUsername
+                    } else {
+                        session.user.username = userData.username
+                    }
+
                     session.user.isAdmin = userData.isAdmin
                     session.user.postCredits = userData.postCredits
                 }

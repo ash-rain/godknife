@@ -383,28 +383,50 @@ export default function PostDetailPage() {
                                 {/* Author Info and Chat Button */}
                                 <div className="mb-4">
                                     <div className="flex items-center justify-between">
-                                        <Link
-                                            href={`/users/${post.author.username}`}
-                                            className="flex items-center gap-3 hover:opacity-80 transition"
-                                        >
-                                            <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden shrink-0">
-                                                {post.author.image ? (
-                                                    <img
-                                                        src={post.author.image}
-                                                        alt={post.author.name}
-                                                        className="w-full h-full object-cover"
-                                                    />
-                                                ) : (
-                                                    <div className="w-full h-full flex items-center justify-center text-gray-500 font-semibold text-lg">
-                                                        {post.author.name?.charAt(0).toUpperCase()}
-                                                    </div>
-                                                )}
+                                        {post.author.username ? (
+                                            <Link
+                                                href={`/users/${post.author.username}`}
+                                                className="flex items-center gap-3 hover:opacity-80 transition"
+                                            >
+                                                <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden shrink-0">
+                                                    {post.author.image ? (
+                                                        <img
+                                                            src={post.author.image}
+                                                            alt={post.author.name}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center text-gray-500 font-semibold text-lg">
+                                                            {post.author.name?.charAt(0).toUpperCase()}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <div className="font-semibold">{post.author.name}</div>
+                                                    <div className="text-gray-500 text-sm">@{post.author.username}</div>
+                                                </div>
+                                            </Link>
+                                        ) : (
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden shrink-0">
+                                                    {post.author.image ? (
+                                                        <img
+                                                            src={post.author.image}
+                                                            alt={post.author.name}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center text-gray-500 font-semibold text-lg">
+                                                            {post.author.name?.charAt(0).toUpperCase()}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <div className="font-semibold">{post.author.name}</div>
+                                                    <div className="text-gray-500 text-sm">No username</div>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <div className="font-semibold">{post.author.name}</div>
-                                                <div className="text-gray-500 text-sm">@{post.author.username}</div>
-                                            </div>
-                                        </Link>
+                                        )}
 
                                         {session && session.user.id !== post.author.id && (
                                             <button
@@ -491,9 +513,18 @@ export default function PostDetailPage() {
                                                             <span className="font-semibold">
                                                                 {comment.user.name}
                                                             </span>
-                                                            <span className="text-gray-500 text-sm">
-                                                                @{comment.user.username}
-                                                            </span>
+                                                            {comment.user.username ? (
+                                                                <Link
+                                                                    href={`/users/${comment.user.username}`}
+                                                                    className="text-gray-500 text-sm hover:text-blue-600 hover:underline"
+                                                                >
+                                                                    @{comment.user.username}
+                                                                </Link>
+                                                            ) : (
+                                                                <span className="text-gray-400 text-sm">
+                                                                    (no username)
+                                                                </span>
+                                                            )}
                                                             <span className="text-gray-400 text-sm">
                                                                 {new Date(comment.createdAt).toLocaleDateString()}
                                                             </span>

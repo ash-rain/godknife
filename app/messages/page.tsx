@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useLanguage } from '@/components/LanguageProvider'
 import Navigation from '@/components/Navigation'
 import { Send, Search, ArrowLeft } from 'lucide-react'
@@ -325,25 +326,54 @@ export default function MessagesPage() {
                                     </button>
 
                                     {/* User Info */}
-                                    <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-                                        {getOtherParticipant(selectedConversation)?.image ? (
-                                            <img
-                                                src={getOtherParticipant(selectedConversation)!.image!}
-                                                alt={getOtherParticipant(selectedConversation)?.name}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center text-gray-500 font-semibold">
-                                                {getOtherParticipant(selectedConversation)?.name?.[0]?.toUpperCase() || '?'}
+                                    {getOtherParticipant(selectedConversation)?.username ? (
+                                        <Link
+                                            href={`/users/${getOtherParticipant(selectedConversation)!.username}`}
+                                            className="flex items-center gap-3 hover:opacity-80 transition"
+                                        >
+                                            <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+                                                {getOtherParticipant(selectedConversation)?.image ? (
+                                                    <img
+                                                        src={getOtherParticipant(selectedConversation)!.image!}
+                                                        alt={getOtherParticipant(selectedConversation)?.name}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center text-gray-500 font-semibold">
+                                                        {getOtherParticipant(selectedConversation)?.name?.[0]?.toUpperCase() || '?'}
+                                                    </div>
+                                                )}
                                             </div>
-                                        )}
-                                    </div>
-                                    <div>
-                                        <h2 className="font-semibold text-gray-900">
-                                            {getOtherParticipant(selectedConversation)?.name}
-                                        </h2>
-                                        <p className="text-xs text-green-600">Active now</p>
-                                    </div>
+                                            <div>
+                                                <h2 className="font-semibold text-gray-900">
+                                                    {getOtherParticipant(selectedConversation)?.name}
+                                                </h2>
+                                                <p className="text-xs text-green-600">Active now</p>
+                                            </div>
+                                        </Link>
+                                    ) : (
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+                                                {getOtherParticipant(selectedConversation)?.image ? (
+                                                    <img
+                                                        src={getOtherParticipant(selectedConversation)!.image!}
+                                                        alt={getOtherParticipant(selectedConversation)?.name}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center text-gray-500 font-semibold">
+                                                        {getOtherParticipant(selectedConversation)?.name?.[0]?.toUpperCase() || '?'}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div>
+                                                <h2 className="font-semibold text-gray-900">
+                                                    {getOtherParticipant(selectedConversation)?.name}
+                                                </h2>
+                                                <p className="text-xs text-green-600">Active now</p>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
