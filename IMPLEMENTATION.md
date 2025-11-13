@@ -138,9 +138,11 @@ This starts:
 - `EMAIL_SERVER` - SMTP server URL
 - `EMAIL_FROM` - Sender email address
 
-**Required for Chat:**
-- `PUSHER_APP_ID`, `PUSHER_KEY`, `PUSHER_SECRET`, `PUSHER_CLUSTER`
-- `NEXT_PUBLIC_PUSHER_KEY`, `NEXT_PUBLIC_PUSHER_CLUSTER`
+**Required for Chat (Soketi - Self-hosted):**
+- `PUSHER_APP_ID`, `PUSHER_KEY`, `PUSHER_SECRET` (defaults provided)
+- `PUSHER_HOST`, `PUSHER_PORT` (localhost:6001 by default)
+- `NEXT_PUBLIC_PUSHER_KEY`, `NEXT_PUBLIC_PUSHER_HOST`, `NEXT_PUBLIC_PUSHER_PORT`
+- See `SOKETI_SETUP.md` for details
 
 **Required for Payments:**
 - `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`
@@ -191,10 +193,11 @@ Access at: http://localhost:3000
 3. Add Facebook Login product
 4. Set redirect URI: `http://localhost:3000/api/auth/callback/facebook`
 
-### Pusher Setup
-1. Sign up at [Pusher](https://pusher.com/)
-2. Create a new Channels app
-3. Copy credentials to `.env`
+### Soketi Setup (Self-hosted Real-time)
+1. Already included in `docker-compose.yml`!
+2. Start with: `docker-compose up -d soketi`
+3. Default credentials are in `.env.example`
+4. See `SOKETI_SETUP.md` for production configuration
 
 ### PayPal Setup
 1. Create [PayPal Developer](https://developer.paypal.com/) account

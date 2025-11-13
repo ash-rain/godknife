@@ -20,7 +20,7 @@ All core features have been implemented and the platform is ready for developmen
 - **Smart sorting**: Newest, hottest, boosted feeds
 
 ### 💬 Messaging
-- **Real-time chat**: Powered by Pusher
+- **Real-time chat**: Powered by Soketi (self-hosted)
 - **Conversations**: Start from any post
 - **Direct contact**: Message sellers directly
 - **Message history**: Persistent conversation storage
@@ -90,18 +90,24 @@ You can test without OAuth, but to enable Google/Facebook login:
    - Set redirect: `http://localhost:3000/api/auth/callback/facebook`
    - Update `.env`: `FACEBOOK_CLIENT_ID` and `FACEBOOK_CLIENT_SECRET`
 
-### Essential: Pusher (For Real-time Chat)
-1. Sign up: https://pusher.com/
-2. Create Channels app
-3. Copy credentials to `.env`:
+### Essential: Soketi (For Real-time Chat) ✅
+**Already configured!** Soketi is a self-hosted Pusher alternative included in docker-compose.yml
+
+1. Start Soketi:
+   ```bash
+   docker-compose up -d soketi
    ```
-   PUSHER_APP_ID=your-app-id
-   PUSHER_KEY=your-key
-   PUSHER_SECRET=your-secret
-   PUSHER_CLUSTER=your-cluster
-   NEXT_PUBLIC_PUSHER_KEY=your-key
-   NEXT_PUBLIC_PUSHER_CLUSTER=your-cluster
+
+2. Environment variables are already set in `.env.example`:
    ```
+   PUSHER_APP_ID=godknife-app
+   PUSHER_KEY=godknife-key
+   PUSHER_SECRET=godknife-secret
+   PUSHER_HOST=localhost
+   PUSHER_PORT=6001
+   ```
+
+3. See `SOKETI_SETUP.md` for advanced configuration and production setup
 
 ### Essential: Payment Gateways
 **PayPal (for testing)**

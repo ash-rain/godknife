@@ -185,7 +185,7 @@ The post will appear in the feed!
 - ⚠️ TypeScript warnings (don't affect functionality)
 - ⚠️ No posts in database yet (create some!)
 - ⚠️ OAuth requires configuration (works without)
-- ⚠️ Pusher needs setup for real-time chat
+- ✅ Real-time chat ready with Soketi (self-hosted)
 
 ### Pages Not Yet Created
 These APIs exist but UI pages need to be built:
@@ -209,10 +209,10 @@ You can still test these via API calls!
 - Add Google/Facebook OAuth credentials to `.env`
 - Test social login
 
-### 3. Set Up Pusher (Optional - 5 min)
-- Sign up at pusher.com
-- Add credentials to `.env`
-- Test real-time chat
+### 3. Start Soketi for Real-time Chat (1 min)
+- Already included in docker-compose.yml!
+- Just run: `docker-compose up -d soketi`
+- See SOKETI_SETUP.md for details
 
 ### 4. Add Sample Data (5 min)
 Use Prisma Studio to add test posts:

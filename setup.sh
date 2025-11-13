@@ -19,7 +19,7 @@ echo "✅ Docker is running"
 echo ""
 
 # Start Docker services
-echo "🐳 Starting Docker services (PostgreSQL, MinIO, Redis)..."
+echo "🐳 Starting Docker services (PostgreSQL, MinIO, Redis, Soketi)..."
 docker-compose up -d
 echo "✅ Docker services started"
 echo ""
