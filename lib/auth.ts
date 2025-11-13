@@ -80,7 +80,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     where: {
                         email: credentials.email as string,
                     },
-                })
+                }) as any
 
                 if (!user || !user.password) {
                     return null
@@ -132,8 +132,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
         async jwt({ token, user }) {
             if (user) {
-                token.id = user.id
+                token.id = user.id as string
             }
+
+            // Fetch user's admin status and add to token
+            if (token.id) {
+                const userData = await prisma.user.findUnique({
+                    where: { id: token.id as string },
+                }) as any
+                if (userData) {
+                    token.isAdmin = userData.isAdmin
+                }
+            }
+
             return token
         },
         async session({ session, token }) {
@@ -143,13 +154,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 // Fetch additional user data
                 const userData = await prisma.user.findUnique({
                     where: { id: token.id as string },
-                    select: {
-                        username: true,
-                        isAdmin: true,
-                        postCredits: true,
-                        name: true,
-                    },
-                })
+                }) as any
 
                 if (userData) {
                     // Auto-generate username if not exists
