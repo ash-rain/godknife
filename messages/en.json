@@ -1,0 +1,122 @@
+{
+    "common": {
+        "appName": "GodKnife",
+        "login": "Login",
+        "logout": "Logout",
+        "signup": "Sign Up",
+        "email": "Email",
+        "password": "Password",
+        "username": "Username",
+        "name": "Name",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "search": "Search",
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success"
+    },
+    "nav": {
+        "home": "Home",
+        "explore": "Explore",
+        "messages": "Messages",
+        "profile": "Profile",
+        "admin": "Admin",
+        "newPost": "New Post"
+    },
+    "auth": {
+        "signInWithEmail": "Sign in with Email",
+        "signInWithGoogle": "Sign in with Google",
+        "signInWithFacebook": "Sign in with Facebook",
+        "orContinueWith": "Or continue with",
+        "noAccount": "Don't have an account?",
+        "hasAccount": "Already have an account?",
+        "forgotPassword": "Forgot password?",
+        "resetPassword": "Reset Password"
+    },
+    "post": {
+        "createPost": "Create Post",
+        "editPost": "Edit Post",
+        "title": "Title",
+        "description": "Description",
+        "price": "Price",
+        "gallery": "Gallery Post",
+        "forSale": "For Sale",
+        "uploadImages": "Upload Images",
+        "publish": "Publish",
+        "like": "Like",
+        "comment": "Comment",
+        "share": "Share",
+        "views": "Views",
+        "comments": "Comments",
+        "likes": "Likes",
+        "boost": "Boost Post",
+        "boosted": "Boosted",
+        "addComment": "Add a comment...",
+        "noComments": "No comments yet",
+        "contactSeller": "Contact Seller"
+    },
+    "profile": {
+        "editProfile": "Edit Profile",
+        "bio": "Bio",
+        "location": "Location",
+        "website": "Website",
+        "posts": "Posts",
+        "gallery": "Gallery",
+        "store": "Store",
+        "followers": "Followers",
+        "following": "Following",
+        "customizeTheme": "Customize Theme"
+    },
+    "messages": {
+        "conversations": "Conversations",
+        "newMessage": "New Message",
+        "typeMessage": "Type a message...",
+        "send": "Send",
+        "noConversations": "No conversations yet",
+        "startConversation": "Start a conversation"
+    },
+    "payment": {
+        "buyPosts": "Buy Posts",
+        "boostPost": "Boost Post",
+        "postsRemaining": "Posts Remaining",
+        "buyMorePosts": "Buy More Posts",
+        "postPackage": "5 Posts for €5",
+        "boostPackage": "Boost for 10 days - €10",
+        "selectPayment": "Select Payment Method",
+        "payWithPayPal": "Pay with PayPal",
+        "payWithMyPOS": "Pay with MyPOS",
+        "paymentSuccess": "Payment Successful",
+        "paymentFailed": "Payment Failed"
+    },
+    "admin": {
+        "dashboard": "Dashboard",
+        "users": "Users",
+        "posts": "Posts",
+        "payments": "Payments",
+        "settings": "Settings",
+        "moderation": "Moderation",
+        "totalUsers": "Total Users",
+        "totalPosts": "Total Posts",
+        "totalRevenue": "Total Revenue",
+        "pendingPosts": "Pending Posts",
+        "approve": "Approve",
+        "reject": "Reject",
+        "banUser": "Ban User",
+        "deletePost": "Delete Post"
+    },
+    "limits": {
+        "freePostLimit": "You've used your free post this week",
+        "buyMorePosts": "Buy more posts to continue",
+        "nextFreePost": "Next free post available in"
+    },
+    "errors": {
+        "somethingWrong": "Something went wrong",
+        "tryAgain": "Please try again",
+        "unauthorized": "You must be logged in",
+        "forbidden": "You don't have permission",
+        "notFound": "Not found",
+        "validationError": "Validation error"
+    }
+}

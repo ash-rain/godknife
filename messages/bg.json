@@ -1,0 +1,122 @@
+{
+    "common": {
+        "appName": "GodKnife",
+        "login": "Вход",
+        "logout": "Изход",
+        "signup": "Регистрация",
+        "email": "Имейл",
+        "password": "Парола",
+        "username": "Потребителско име",
+        "name": "Име",
+        "save": "Запази",
+        "cancel": "Откажи",
+        "delete": "Изтрий",
+        "edit": "Редактирай",
+        "search": "Търси",
+        "loading": "Зареждане...",
+        "error": "Грешка",
+        "success": "Успех"
+    },
+    "nav": {
+        "home": "Начало",
+        "explore": "Разгледай",
+        "messages": "Съобщения",
+        "profile": "Профил",
+        "admin": "Админ",
+        "newPost": "Нова публикация"
+    },
+    "auth": {
+        "signInWithEmail": "Вход с имейл",
+        "signInWithGoogle": "Вход с Google",
+        "signInWithFacebook": "Вход с Facebook",
+        "orContinueWith": "Или продължи с",
+        "noAccount": "Нямате акаунт?",
+        "hasAccount": "Вече имате акаунт?",
+        "forgotPassword": "Забравена парола?",
+        "resetPassword": "Нулиране на парола"
+    },
+    "post": {
+        "createPost": "Създай публикация",
+        "editPost": "Редактирай публикация",
+        "title": "Заглавие",
+        "description": "Описание",
+        "price": "Цена",
+        "gallery": "Галерия",
+        "forSale": "За продажба",
+        "uploadImages": "Качи снимки",
+        "publish": "Публикувай",
+        "like": "Харесай",
+        "comment": "Коментар",
+        "share": "Сподели",
+        "views": "Прегледи",
+        "comments": "Коментари",
+        "likes": "Харесвания",
+        "boost": "Промотирай",
+        "boosted": "Промотирана",
+        "addComment": "Добави коментар...",
+        "noComments": "Все още няма коментари",
+        "contactSeller": "Свържи се с продавача"
+    },
+    "profile": {
+        "editProfile": "Редактирай профил",
+        "bio": "Биография",
+        "location": "Местоположение",
+        "website": "Уебсайт",
+        "posts": "Публикации",
+        "gallery": "Галерия",
+        "store": "Магазин",
+        "followers": "Последователи",
+        "following": "Следвани",
+        "customizeTheme": "Персонализирай тема"
+    },
+    "messages": {
+        "conversations": "Разговори",
+        "newMessage": "Ново съобщение",
+        "typeMessage": "Напиши съобщение...",
+        "send": "Изпрати",
+        "noConversations": "Все още няма разговори",
+        "startConversation": "Започни разговор"
+    },
+    "payment": {
+        "buyPosts": "Купи публикации",
+        "boostPost": "Промотирай публикация",
+        "postsRemaining": "Оставащи публикации",
+        "buyMorePosts": "Купи още публикации",
+        "postPackage": "5 публикации за €5",
+        "boostPackage": "Промоция за 10 дни - €10",
+        "selectPayment": "Избери метод на плащане",
+        "payWithPayPal": "Плати с PayPal",
+        "payWithMyPOS": "Плати с MyPOS",
+        "paymentSuccess": "Плащането е успешно",
+        "paymentFailed": "Плащането е неуспешно"
+    },
+    "admin": {
+        "dashboard": "Табло",
+        "users": "Потребители",
+        "posts": "Публикации",
+        "payments": "Плащания",
+        "settings": "Настройки",
+        "moderation": "Модерация",
+        "totalUsers": "Общо потребители",
+        "totalPosts": "Общо публикации",
+        "totalRevenue": "Общ приход",
+        "pendingPosts": "Чакащи публикации",
+        "approve": "Одобри",
+        "reject": "Отхвърли",
+        "banUser": "Блокирай потребител",
+        "deletePost": "Изтрий публикация"
+    },
+    "limits": {
+        "freePostLimit": "Използвахте безплатната си публикация тази седмица",
+        "buyMorePosts": "Купете още публикации за да продължите",
+        "nextFreePost": "Следваща безплатна публикация след"
+    },
+    "errors": {
+        "somethingWrong": "Нещо се обърка",
+        "tryAgain": "Моля опитайте отново",
+        "unauthorized": "Трябва да влезете в профила си",
+        "forbidden": "Нямате разрешение",
+        "notFound": "Не е намерено",
+        "validationError": "Грешка при валидация"
+    }
+}

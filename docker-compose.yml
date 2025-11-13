@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: godknife-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: godknife
+      POSTGRES_PASSWORD: godknife_password
+      POSTGRES_DB: godknife
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - godknife-network
+
+  minio:
+    image: minio/minio:latest
+    container_name: godknife-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: godknife
+      MINIO_ROOT_PASSWORD: godknife_password
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - godknife-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: godknife-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - godknife-network
+
+volumes:
+  postgres_data:
+  minio_data:
+  redis_data:
+
+networks:
+  godknife-network:
+    driver: bridge
