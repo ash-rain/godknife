@@ -3,8 +3,9 @@
 import { useSearchParams } from 'next/navigation'
 import { useLanguage } from '@/components/LanguageProvider'
 import Link from 'next/link'
+import { Suspense } from 'react'
 
-export default function AuthErrorPage() {
+function AuthErrorContent() {
     const searchParams = useSearchParams()
     const error = searchParams.get('error')
     const { t } = useLanguage()
@@ -134,5 +135,19 @@ export default function AuthErrorPage() {
                 </div>
             </div>
         </div>
+    )
+}
+
+export default function AuthErrorPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+                <div className="sm:mx-auto sm:w-full sm:max-w-md">
+                    <div className="text-center">Loading...</div>
+                </div>
+            </div>
+        }>
+            <AuthErrorContent />
+        </Suspense>
     )
 }

@@ -21,6 +21,7 @@
     "minio": "^8.0.2",
     "next": "16.0.3",
     "next-auth": "^5.0.0-beta.24",
+    "next-intl": "^4.5.3",
     "nodemailer": "^6.9.15",
     "pusher": "^5.2.0",
     "pusher-js": "^8.4.0-rc2",
