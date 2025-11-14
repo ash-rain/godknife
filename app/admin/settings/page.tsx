@@ -77,15 +77,14 @@ export default async function AdminSettingsPage() {
                                             ${payment.amount.toFixed(2)}
                                         </td>
                                         <td className="py-3">
-                                            <span className={`text-xs px-2 py-1 rounded ${
-                                                payment.status === 'COMPLETED'
+                                            <span className={`text-xs px-2 py-1 rounded ${payment.status === 'COMPLETED'
                                                     ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
                                                     : payment.status === 'PENDING'
-                                                    ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200'
-                                                    : payment.status === 'FAILED'
-                                                    ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
-                                                    : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
-                                            }`}>
+                                                        ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200'
+                                                        : payment.status === 'FAILED'
+                                                            ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
+                                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                                                }`}>
                                                 {payment.status}
                                             </span>
                                         </td>
@@ -164,11 +163,10 @@ function EnvStatus({ name, value }: { name: string; value?: string }) {
     return (
         <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded">
             <code className="text-sm">{name}</code>
-            <span className={`text-xs px-2 py-1 rounded ${
-                isSet
+            <span className={`text-xs px-2 py-1 rounded ${isSet
                     ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
                     : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
-            }`}>
+                }`}>
                 {isSet ? 'Set' : 'Not Set'}
             </span>
         </div>

@@ -64,19 +64,18 @@ export default async function AdminPostsPage({
             {/* Status Filter */}
             <div className="flex gap-2 mb-6 flex-wrap">
                 {statusOptions.map((option) => {
-                    const count = option.value === 'all' 
+                    const count = option.value === 'all'
                         ? statusCounts.reduce((sum: number, s: any) => sum + s._count, 0)
                         : statusCounts.find((s: any) => s.status === option.value)?._count || 0
-                    
+
                     return (
                         <Link
                             key={option.value}
                             href={`/admin/posts?status=${option.value}`}
-                            className={`px-4 py-2 rounded-lg ${
-                                status === option.value
+                            className={`px-4 py-2 rounded-lg ${status === option.value
                                     ? 'bg-blue-600 text-white'
                                     : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
-                            }`}
+                                }`}
                         >
                             {option.label} ({count})
                         </Link>
@@ -122,15 +121,14 @@ export default async function AdminPostsPage({
                                         </div>
                                     </td>
                                     <td className="py-3 px-4">
-                                        <span className={`text-xs px-2 py-1 rounded ${
-                                            post.status === 'ACTIVE'
+                                        <span className={`text-xs px-2 py-1 rounded ${post.status === 'ACTIVE'
                                                 ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
                                                 : post.status === 'PENDING'
-                                                ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200'
-                                                : post.status === 'REJECTED'
-                                                ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
-                                                : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
-                                        }`}>
+                                                    ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200'
+                                                    : post.status === 'REJECTED'
+                                                        ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
+                                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                                            }`}>
                                             {post.status}
                                         </span>
                                     </td>
