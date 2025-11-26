@@ -43,53 +43,63 @@ model VerificationToken {
 }
 
 model User {
-  id                String         @id @default(cuid())
-  name              String?
-  email             String?        @unique
-  emailVerified     DateTime?
-  image             String?
-  password          String?
-  username          String?        @unique
-  bio               String?
-  location          String?
-  website           String?
-  coverImage        String?
-  customTheme       Json?
-  isAdmin           Boolean        @default(false)
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
-  
-  accounts          Account[]
-  sessions          Session[]
-  posts             Post[]
-  likes             Like[]
-  comments          Comment[]
-  payments          Payment[]
-  postCredits       Int            @default(0)
-  lastFreePostDate  DateTime?
-  
-  sentMessages      Message[]      @relation("SentMessages")
-  conversations     ConversationParticipant[]
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  username      String?   @unique
+  bio           String?
+  location      String?
+  website       String?
+  coverImage    String?
+  customTheme   Json?
+  isAdmin       Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts         Account[]
+  sessions         Session[]
+  posts            Post[]
+  likes            Like[]
+  comments         Comment[]
+  payments         Payment[]
+  postCredits      Int       @default(0)
+  lastFreePostDate DateTime?
+
+  sentMessages  Message[]                 @relation("SentMessages")
+  conversations ConversationParticipant[]
+
+  // Forum relations
+  threads           Thread[]        @relation("ThreadAuthor")
+  threadComments    ThreadComment[] @relation("ThreadCommentAuthor")
+  moderationActions ModerationLog[] @relation("ModeratorActions")
+  moderatedActions  ModerationLog[] @relation("ModeratedUser")
+  bans              UserBan[]       @relation("BannedUser")
+  issuedBans        UserBan[]       @relation("BanIssuer")
+  isModerator       Boolean         @default(false)
+  isBanned          Boolean         @default(false)
 }
 
 model Post {
-  id            String      @id @default(cuid())
-  title         String
-  description   String      @db.Text
-  images        String[]
-  price         Float?
-  isGallery     Boolean     @default(false)
-  isBoosted     Boolean     @default(false)
+  id             String     @id @default(cuid())
+  title          String
+  description    String     @db.Text
+  images         String[]
+  price          Float?
+  isGallery      Boolean    @default(false)
+  isBoosted      Boolean    @default(false)
   boostExpiresAt DateTime?
-  views         Int         @default(0)
-  authorId      String
-  author        User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  likes         Like[]
-  comments      Comment[]
-  shares        Int         @default(0)
-  status        PostStatus  @default(ACTIVE)
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  views          Int        @default(0)
+  authorId       String
+  author         User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes          Like[]
+  comments       Comment[]
+  shares         Int        @default(0)
+  status         PostStatus @default(ACTIVE)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
 
   @@index([authorId])
   @@index([createdAt])
@@ -130,12 +140,12 @@ model Comment {
 }
 
 model Conversation {
-  id            String                      @id @default(cuid())
-  postId        String?
-  participants  ConversationParticipant[]
-  messages      Message[]
-  createdAt     DateTime                    @default(now())
-  updatedAt     DateTime                    @updatedAt
+  id           String                    @id @default(cuid())
+  postId       String?
+  participants ConversationParticipant[]
+  messages     Message[]
+  createdAt    DateTime                  @default(now())
+  updatedAt    DateTime                  @updatedAt
 
   @@index([postId])
 }
@@ -167,18 +177,18 @@ model Message {
 }
 
 model Payment {
-  id              String        @id @default(cuid())
-  userId          String
-  amount          Float
-  currency        String        @default("EUR")
-  provider        PaymentProvider
+  id                String          @id @default(cuid())
+  userId            String
+  amount            Float
+  currency          String          @default("EUR")
+  provider          PaymentProvider
   providerPaymentId String?
-  type            PaymentType
-  quantity        Int
-  status          PaymentStatus @default(PENDING)
-  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  type              PaymentType
+  quantity          Int
+  status            PaymentStatus   @default(PENDING)
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
 
   @@index([userId])
   @@index([status])
@@ -202,9 +212,148 @@ enum PaymentStatus {
 }
 
 model Settings {
-  id                    String   @id @default(cuid())
-  key                   String   @unique
-  value                 String   @db.Text
-  description           String?
-  updatedAt             DateTime @updatedAt
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String   @db.Text
+  description String?
+  updatedAt   DateTime @updatedAt
+}
+
+model Forum {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String   @db.Text
+  icon        String?
+  color       String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  threads     Thread[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([order])
+}
+
+model Thread {
+  id             String          @id @default(cuid())
+  title          String
+  content        String          @db.Text
+  forumId        String
+  authorId       String
+  isPinned       Boolean         @default(false)
+  isLocked       Boolean         @default(false)
+  status         ThreadStatus    @default(ACTIVE)
+  views          Int             @default(0)
+  forum          Forum           @relation(fields: [forumId], references: [id], onDelete: Cascade)
+  author         User            @relation("ThreadAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  comments       ThreadComment[]
+  moderationLogs ModerationLog[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([forumId])
+  @@index([authorId])
+  @@index([isPinned])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum ThreadStatus {
+  ACTIVE
+  PENDING
+  FLAGGED
+  DELETED
+  LOCKED
+}
+
+model ThreadComment {
+  id             String          @id @default(cuid())
+  content        String          @db.Text
+  threadId       String
+  authorId       String
+  parentId       String?
+  status         CommentStatus   @default(ACTIVE)
+  thread         Thread          @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  author         User            @relation("ThreadCommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  parent         ThreadComment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies        ThreadComment[] @relation("CommentReplies")
+  moderationLogs ModerationLog[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([threadId])
+  @@index([authorId])
+  @@index([parentId])
+  @@index([status])
+}
+
+enum CommentStatus {
+  ACTIVE
+  PENDING
+  FLAGGED
+  DELETED
+}
+
+model ModerationLog {
+  id           String           @id @default(cuid())
+  action       ModerationAction
+  reason       String?          @db.Text
+  moderatorId  String
+  targetUserId String?
+  threadId     String?
+  commentId    String?
+  postId       String?
+  moderator    User             @relation("ModeratorActions", fields: [moderatorId], references: [id])
+  targetUser   User?            @relation("ModeratedUser", fields: [targetUserId], references: [id])
+  thread       Thread?          @relation(fields: [threadId], references: [id])
+  comment      ThreadComment?   @relation(fields: [commentId], references: [id])
+  createdAt    DateTime         @default(now())
+
+  @@index([moderatorId])
+  @@index([targetUserId])
+  @@index([threadId])
+  @@index([commentId])
+  @@index([createdAt])
+}
+
+enum ModerationAction {
+  PIN_THREAD
+  UNPIN_THREAD
+  LOCK_THREAD
+  UNLOCK_THREAD
+  DELETE_THREAD
+  RESTORE_THREAD
+  DELETE_COMMENT
+  RESTORE_COMMENT
+  FLAG_THREAD
+  UNFLAG_THREAD
+  FLAG_COMMENT
+  UNFLAG_COMMENT
+  BAN_USER
+  UNBAN_USER
+  WARN_USER
+  DELETE_POST
+  APPROVE_POST
+  APPROVE_THREAD
+  APPROVE_COMMENT
+}
+
+model UserBan {
+  id          String    @id @default(cuid())
+  userId      String
+  bannedById  String
+  reason      String    @db.Text
+  expiresAt   DateTime?
+  isPermanent Boolean   @default(false)
+  isActive    Boolean   @default(true)
+  user        User      @relation("BannedUser", fields: [userId], references: [id], onDelete: Cascade)
+  bannedBy    User      @relation("BanIssuer", fields: [bannedById], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([isActive])
+  @@index([expiresAt])
 }

@@ -56,7 +56,7 @@ export default async function AdminPage() {
             {/* Quick Actions */}
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow mb-8">
                 <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <a
                         href="/admin/users"
                         className="p-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
@@ -70,6 +70,13 @@ export default async function AdminPage() {
                     >
                         <h3 className="font-medium">Manage Posts</h3>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">View and moderate posts</p>
+                    </a>
+                    <a
+                        href="/admin/forums"
+                        className="p-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                    >
+                        <h3 className="font-medium">Manage Forums</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage forums and threads</p>
                     </a>
                     <a
                         href="/admin/settings"
