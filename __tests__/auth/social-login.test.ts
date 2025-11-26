@@ -12,13 +12,13 @@ describe('Social Login (OAuth)', () => {
             },
             select: { id: true }
         })
-        
+
         for (const user of usersWithOauth) {
             await prisma.account.deleteMany({
                 where: { userId: user.id }
             })
         }
-        
+
         await prisma.user.deleteMany({
             where: {
                 email: {
@@ -38,13 +38,13 @@ describe('Social Login (OAuth)', () => {
             },
             select: { id: true }
         })
-        
+
         for (const user of usersWithOauth) {
             await prisma.account.deleteMany({
                 where: { userId: user.id }
             })
         }
-        
+
         await prisma.user.deleteMany({
             where: {
                 email: {

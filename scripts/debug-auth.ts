@@ -23,7 +23,7 @@ async function debugAuth() {
         // Test 3: Create test user
         console.log('3️⃣ Creating test user...')
         const testEmail = 'debug-test@example.com'
-        
+
         // Clean up if exists
         await prisma.user.deleteMany({
             where: { email: testEmail }

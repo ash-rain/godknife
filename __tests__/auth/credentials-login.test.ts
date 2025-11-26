@@ -85,7 +85,7 @@ describe('Credentials Login', () => {
         })
 
         expect(user?.password).toBeNull()
-        
+
         // Clean up
         await prisma.user.delete({
             where: { email: 'oauth-user@example.com' }
