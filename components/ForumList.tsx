@@ -54,7 +54,18 @@ export default function ForumList({ initialForums }: ForumListProps) {
                             </div>
                         )}
                         <div className="flex-1">
-                            <h3 className="text-xl font-semibold mb-2">{forum.name}</h3>
+                            <div className="flex justify-between items-start mb-2">
+                                <h3 className="text-xl font-semibold">{forum.name}</h3>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        router.push(`/forums/${forum.slug}/new-thread`)
+                                    }}
+                                    className="px-3 py-1 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition"
+                                >
+                                    {t('forum.newThread')}
+                                </button>
+                            </div>
                             <p className="text-gray-600 dark:text-gray-400 mb-3">{forum.description}</p>
                             <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-500">
                                 <span>{forum._count.threads} {t('forum.threads').toLowerCase()}</span>
