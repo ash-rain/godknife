@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { useLanguage } from './LanguageProvider'
 import { useState, useRef } from 'react'
-import { Menu, X, MessageSquare, User, Settings, LogOut, Home, Plus } from 'lucide-react'
+import { Menu, X, MessageSquare, User, Settings, LogOut, Home, Plus, Users } from 'lucide-react'
 
 interface NavigationProps {
     onCreatePost?: () => void
@@ -35,6 +35,14 @@ export default function Navigation({ onCreatePost }: NavigationProps) {
                             >
                                 <Home className="h-5 w-5" />
                                 <span>{t('nav.home')}</span>
+                            </Link>
+
+                            <Link
+                                href="/forums"
+                                className="inline-flex items-center gap-2 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition"
+                            >
+                                <Users className="h-5 w-5" />
+                                <span>Forums</span>
                             </Link>
 
                             {session && (
@@ -154,6 +162,14 @@ export default function Navigation({ onCreatePost }: NavigationProps) {
                         >
                             <Home className="h-5 w-5" />
                             <span>{t('nav.home')}</span>
+                        </Link>
+                        <Link
+                            href="/forums"
+                            className="flex items-center gap-2 pl-3 pr-4 py-2 text-base font-medium text-gray-900"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            <Users className="h-5 w-5" />
+                            <span>Forums</span>
                         </Link>
                         {session && (
                             <>
