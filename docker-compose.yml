@@ -25,10 +25,24 @@ services:
       MINIO_ROOT_USER: godknife
       MINIO_ROOT_PASSWORD: godknife_password
     ports:
-      - "9000:9000"
+      - "9009:9000"
       - "9001:9001"
     volumes:
       - minio_data:/data
+    networks:
+      - godknife-network
+
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      until /usr/bin/mc config host add myminio http://minio:9000 godknife godknife_password; do echo '...waiting...' && sleep 1; done;
+      /usr/bin/mc mb -p myminio/godknife-images;
+      /usr/bin/mc anonymous set public myminio/godknife-images;
+      exit 0;
+      "
     networks:
       - godknife-network
 
@@ -37,7 +51,7 @@ services:
     container_name: godknife-redis
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - redis_data:/data
     networks:
