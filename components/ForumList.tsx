@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useLanguage } from './LanguageProvider'
 
 interface Forum {
     id: string
@@ -32,6 +33,7 @@ interface ForumListProps {
 
 export default function ForumList({ initialForums }: ForumListProps) {
     const router = useRouter()
+    const { t } = useLanguage()
     const [forums] = useState<Forum[]>(initialForums)
 
     return (
@@ -55,12 +57,12 @@ export default function ForumList({ initialForums }: ForumListProps) {
                             <h3 className="text-xl font-semibold mb-2">{forum.name}</h3>
                             <p className="text-gray-600 dark:text-gray-400 mb-3">{forum.description}</p>
                             <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-500">
-                                <span>{forum._count.threads} threads</span>
+                                <span>{forum._count.threads} {t('forum.threads').toLowerCase()}</span>
                                 {forum.threads[0] && (
                                     <span className="flex items-center gap-2">
-                                        <span>Latest:</span>
+                                        <span>{t('forum.latestThread')}</span>
                                         <span className="font-medium">{forum.threads[0].title}</span>
-                                        <span>by {forum.threads[0].author.username || forum.threads[0].author.name}</span>
+                                        <span>{t('forum.by')} {forum.threads[0].author.username || forum.threads[0].author.name}</span>
                                     </span>
                                 )}
                             </div>
@@ -71,7 +73,7 @@ export default function ForumList({ initialForums }: ForumListProps) {
 
             {forums.length === 0 && (
                 <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                    No forums available yet.
+                    {t('forum.noThreads')}
                 </div>
             )}
         </div>

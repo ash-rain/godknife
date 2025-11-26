@@ -1,100 +1,84 @@
-import { prisma } from "@/lib/prisma"
-import { notFound, redirect } from "next/navigation"
-import { auth } from "@/lib/auth"
-import ThreadDetail from "@/components/ThreadDetail"
+'use client'
 
-export default async function ThreadPage({ params }: { params: { id: string } }) {
-    const thread = await prisma.thread.findUnique({
-        where: { id: params.id },
-        include: {
-            author: {
-                select: {
-                    id: true,
-                    username: true,
-                    name: true,
-                    image: true,
-                    isBanned: true,
-                }
-            },
-            forum: true,
-            comments: {
-                where: {
-                    parentId: null,
-                    status: 'ACTIVE'
-                },
-                orderBy: { createdAt: 'asc' },
-                include: {
-                    author: {
-                        select: {
-                            id: true,
-                            username: true,
-                            name: true,
-                            image: true,
-                            isBanned: true,
-                        }
-                    },
-                    replies: {
-                        where: { status: 'ACTIVE' },
-                        orderBy: { createdAt: 'asc' },
-                        include: {
-                            author: {
-                                select: {
-                                    id: true,
-                                    username: true,
-                                    name: true,
-                                    image: true,
-                                    isBanned: true,
-                                }
-                            }
-                        }
-                    }
-                }
+import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useLanguage } from '@/components/LanguageProvider'
+import Navigation from '@/components/Navigation'
+import ThreadDetail from '@/components/ThreadDetail'
+
+interface ThreadData {
+    id: string
+    title: string
+    content: string
+    isPinned: boolean
+    isLocked: boolean
+    status: string
+    views: number
+    createdAt: string
+    author: {
+        id: string
+        username: string | null
+        name: string | null
+        image: string | null
+        isBanned: boolean
+    }
+    forum: {
+        id: string
+        name: string
+        slug: string
+    }
+    comments: any[]
+}
+
+export default function ThreadPage({ params }: { params: { id: string } }) {
+    const router = useRouter()
+    const { data: session } = useSession()
+    const { t } = useLanguage()
+    const [thread, setThread] = useState<ThreadData | null>(null)
+    const [isModerator, setIsModerator] = useState(false)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        fetchThread()
+    }, [params.id])
+
+    const fetchThread = async () => {
+        try {
+            setLoading(true)
+            const response = await fetch(`/api/threads/${params.id}`)
+            if (!response.ok) {
+                throw new Error('Thread not found')
             }
+            const data = await response.json()
+            setThread(data.thread)
+            setIsModerator(data.isModerator || false)
+        } catch (error) {
+            console.error('Error fetching thread:', error)
+            router.push('/forums')
+        } finally {
+            setLoading(false)
         }
-    })
-
-    if (!thread) {
-        notFound()
-    }
-
-    // Increment view count
-    await prisma.thread.update({
-        where: { id: params.id },
-        data: { views: { increment: 1 } }
-    })
-
-    const session = await auth()
-    let isModerator = false
-
-    if (session?.user) {
-        const user = await prisma.user.findUnique({
-            where: { id: session.user.id },
-            select: { isModerator: true, isAdmin: true }
-        })
-        isModerator = user?.isModerator || user?.isAdmin || false
-    }
-
-    // Convert dates to strings for the component
-    const threadData = {
-        ...thread,
-        createdAt: thread.createdAt.toISOString(),
-        comments: thread.comments.map(comment => ({
-            ...comment,
-            createdAt: comment.createdAt.toISOString(),
-            replies: comment.replies?.map(reply => ({
-                ...reply,
-                createdAt: reply.createdAt.toISOString(),
-            }))
-        }))
     }
 
     return (
-        <div className="container mx-auto p-6">
-            <ThreadDetail
-                thread={threadData}
-                currentUserId={session?.user?.id}
-                isModerator={isModerator}
-            />
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+            <Navigation />
+
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                {loading ? (
+                    <div className="text-center py-12">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                        <p className="mt-4 text-gray-600 dark:text-gray-400">{t('common.loading')}</p>
+                    </div>
+                ) : thread ? (
+                    <ThreadDetail
+                        thread={thread}
+                        currentUserId={session?.user?.id}
+                        isModerator={isModerator}
+                    />
+                ) : null}
+            </main>
         </div>
     )
 }

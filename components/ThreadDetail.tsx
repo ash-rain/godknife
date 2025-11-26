@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { formatDistanceToNow } from 'date-fns'
+import { useLanguage } from './LanguageProvider'
 
 interface ThreadComment {
     id: string
@@ -46,6 +47,7 @@ interface ThreadDetailProps {
 }
 
 export default function ThreadDetail({ thread, currentUserId, isModerator }: ThreadDetailProps) {
+    const { t } = useLanguage()
     const [comments, setComments] = useState(thread.comments)
     const [newComment, setNewComment] = useState('')
     const [replyTo, setReplyTo] = useState<string | null>(null)
@@ -177,7 +179,7 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
                                     onClick={() => setReplyTo(comment.id)}
                                     className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
                                 >
-                                    Reply
+                                    {t('forum.reply')}
                                 </button>
                             )}
                             {isModerator && (
@@ -186,13 +188,13 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
                                         onClick={() => handleModerateComment(comment.id, 'delete')}
                                         className="text-sm text-red-600 dark:text-red-400 hover:underline"
                                     >
-                                        Delete
+                                        {t('common.delete')}
                                     </button>
                                     <button
                                         onClick={() => handleModerateComment(comment.id, 'flag')}
                                         className="text-sm text-yellow-600 dark:text-yellow-400 hover:underline"
                                     >
-                                        Flag
+                                        {t('forum.flag')}
                                     </button>
                                 </>
                             )}
@@ -202,7 +204,7 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
                                 <textarea
                                     value={newComment}
                                     onChange={(e) => setNewComment(e.target.value)}
-                                    placeholder="Write your reply..."
+                                    placeholder={t('forum.writeReply')}
                                     className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
                                     rows={3}
                                 />
@@ -212,7 +214,7 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
                                         disabled={isSubmitting || !newComment.trim()}
                                         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition"
                                     >
-                                        {isSubmitting ? 'Posting...' : 'Post Reply'}
+                                        {isSubmitting ? t('forum.posting') : t('forum.postReply')}
                                     </button>
                                     <button
                                         onClick={() => {
@@ -221,7 +223,7 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
                                         }}
                                         className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition"
                                     >
-                                        Cancel
+                                        {t('forum.cancel')}
                                     </button>
                                 </div>
                             </div>
@@ -242,28 +244,28 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
                         href={`/forums/${thread.forum.slug}`}
                         className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
                     >
-                        ← Back to {thread.forum.name}
+                        ← {t('forum.backToForum')} {thread.forum.name}
                     </a>
                 </div>
                 <div className="flex items-start gap-2 mb-4">
                     {thread.isPinned && (
                         <span className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 text-xs rounded">
-                            Pinned
+                            {t('forum.pinned')}
                         </span>
                     )}
                     {thread.isLocked && (
                         <span className="px-2 py-1 bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300 text-xs rounded">
-                            Locked
+                            {t('forum.locked')}
                         </span>
                     )}
                     <h1 className="text-3xl font-bold flex-1">{thread.title}</h1>
                 </div>
                 <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-4">
-                    <span>by {thread.author.username || thread.author.name}</span>
+                    <span>{t('forum.by')} {thread.author.username || thread.author.name}</span>
                     <span>•</span>
                     <span>{formatDistanceToNow(new Date(thread.createdAt), { addSuffix: true })}</span>
                     <span>•</span>
-                    <span>{thread.views} views</span>
+                    <span>{thread.views} {t('forum.views')}</span>
                 </div>
                 <div className="prose dark:prose-invert max-w-none">
                     <p className="whitespace-pre-wrap">{thread.content}</p>
@@ -272,31 +274,31 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
                 {/* Moderation Actions */}
                 {isModerator && (
                     <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <h3 className="font-semibold mb-3">Moderation Actions:</h3>
+                        <h3 className="font-semibold mb-3">{t('forum.moderationActions')}</h3>
                         <div className="flex gap-2 flex-wrap">
                             <button
                                 onClick={() => handleModerateThread(thread.isPinned ? 'unpin' : 'pin')}
                                 className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800 text-sm"
                             >
-                                {thread.isPinned ? 'Unpin' : 'Pin'}
+                                {thread.isPinned ? t('forum.unpin') : t('forum.pin')}
                             </button>
                             <button
                                 onClick={() => handleModerateThread(thread.isLocked ? 'unlock' : 'lock')}
                                 className="px-3 py-1 bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-800 text-sm"
                             >
-                                {thread.isLocked ? 'Unlock' : 'Lock'}
+                                {thread.isLocked ? t('forum.unlock') : t('forum.lock')}
                             </button>
                             <button
                                 onClick={() => handleModerateThread('flag')}
                                 className="px-3 py-1 bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 rounded hover:bg-yellow-200 dark:hover:bg-yellow-800 text-sm"
                             >
-                                Flag
+                                {t('forum.flag')}
                             </button>
                             <button
                                 onClick={() => handleModerateThread('delete')}
                                 className="px-3 py-1 bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 rounded hover:bg-red-200 dark:hover:bg-red-800 text-sm"
                             >
-                                Delete
+                                {t('forum.deleteThread')}
                             </button>
                         </div>
                     </div>
@@ -305,18 +307,18 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
 
             {/* Comments */}
             <div className="mb-6">
-                <h2 className="text-2xl font-bold mb-4">Comments ({comments.length})</h2>
+                <h2 className="text-2xl font-bold mb-4">{t('forum.comments')} ({comments.length})</h2>
                 {comments.map((comment) => renderComment(comment))}
             </div>
 
             {/* New Comment Form */}
             {currentUserId && !thread.isLocked && (
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-                    <h3 className="font-semibold mb-3">Add a comment</h3>
+                    <h3 className="font-semibold mb-3">{t('forum.addComment')}</h3>
                     <textarea
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
-                        placeholder="Write your comment..."
+                        placeholder={t('forum.writeComment')}
                         className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
                         rows={4}
                     />
@@ -325,27 +327,27 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
                         disabled={isSubmitting || !newComment.trim()}
                         className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition"
                     >
-                        {isSubmitting ? 'Posting...' : 'Post Comment'}
+                        {isSubmitting ? t('forum.posting') : t('forum.postComment')}
                     </button>
                 </div>
             )}
 
             {thread.isLocked && (
                 <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 text-center text-gray-600 dark:text-gray-400">
-                    This thread is locked. No new comments can be added.
+                    {t('forum.threadLocked')}
                 </div>
             )}
 
             {!currentUserId && (
                 <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 text-center">
                     <p className="text-gray-600 dark:text-gray-400 mb-3">
-                        Please sign in to comment
+                        {t('forum.signInToComment')}
                     </p>
                     <a
                         href="/auth/signin"
                         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 inline-block"
                     >
-                        Sign In
+                        {t('common.login')}
                     </a>
                 </div>
             )}

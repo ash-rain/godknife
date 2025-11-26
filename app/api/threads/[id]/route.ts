@@ -75,7 +75,19 @@ export async function GET(
             return NextResponse.json({ error: 'Thread not found' }, { status: 404 })
         }
 
-        return NextResponse.json({ thread })
+        // Check if user is moderator
+        const session = await auth()
+        let isModerator = false
+
+        if (session?.user) {
+            const user = await prisma.user.findUnique({
+                where: { id: session.user.id },
+                select: { isModerator: true, isAdmin: true }
+            })
+            isModerator = user?.isModerator || user?.isAdmin || false
+        }
+
+        return NextResponse.json({ thread, isModerator })
     } catch (error) {
         console.error('Error fetching thread:', error)
         return NextResponse.json({ error: 'Failed to fetch thread' }, { status: 500 })

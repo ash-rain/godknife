@@ -42,7 +42,7 @@ export default function Navigation({ onCreatePost }: NavigationProps) {
                                 className="inline-flex items-center gap-2 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition"
                             >
                                 <Users className="h-5 w-5" />
-                                <span>Forums</span>
+                                <span>{t('nav.forums')}</span>
                             </Link>
 
                             {session && (
@@ -169,7 +169,7 @@ export default function Navigation({ onCreatePost }: NavigationProps) {
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             <Users className="h-5 w-5" />
-                            <span>Forums</span>
+                            <span>{t('nav.forums')}</span>
                         </Link>
                         {session && (
                             <>
