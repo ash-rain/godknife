@@ -53,7 +53,7 @@ export default function NewThreadPage({ params }: { params: { slug: string } }) 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        
+
         if (!title.trim() || !content.trim()) {
             setError('Title and content are required')
             return
@@ -113,7 +113,7 @@ export default function NewThreadPage({ params }: { params: { slug: string } }) 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="max-w-3xl mx-auto">
                     <div className="mb-6">
-                        <a 
+                        <a
                             href={`/forums/${forum.slug}`}
                             className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
                         >
@@ -134,7 +134,7 @@ export default function NewThreadPage({ params }: { params: { slug: string } }) 
 
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div>
-                                <label 
+                                <label
                                     htmlFor="title"
                                     className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                                 >
@@ -153,7 +153,7 @@ export default function NewThreadPage({ params }: { params: { slug: string } }) 
                             </div>
 
                             <div>
-                                <label 
+                                <label
                                     htmlFor="content"
                                     className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                                 >

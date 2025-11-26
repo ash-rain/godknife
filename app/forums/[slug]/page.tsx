@@ -79,8 +79,8 @@ export default function ForumPage({ params }: { params: { slug: string } }) {
                 ) : forum ? (
                     <>
                         <div className="mb-8">
-                            <a 
-                                href="/forums" 
+                            <a
+                                href="/forums"
                                 className="text-blue-600 dark:text-blue-400 hover:underline text-sm mb-4 inline-block"
                             >
                                 ← {t('forum.backToForums')}
