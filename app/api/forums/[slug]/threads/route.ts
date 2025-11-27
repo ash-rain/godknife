@@ -36,7 +36,7 @@ export async function GET(
 
         // Build where clause based on admin status
         const whereClause: any = { forumId: forum.id }
-        
+
         // For non-admin or when not including all, filter by status
         if (!includeAll || !isAdmin) {
             whereClause.status = { in: ['ACTIVE', 'LOCKED'] }

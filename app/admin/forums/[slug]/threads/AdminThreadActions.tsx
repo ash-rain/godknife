@@ -10,11 +10,11 @@ interface AdminThreadActionsProps {
     status: string
 }
 
-export default function AdminThreadActions({ 
-    threadId, 
-    isPinned, 
-    isLocked, 
-    status 
+export default function AdminThreadActions({
+    threadId,
+    isPinned,
+    isLocked,
+    status
 }: AdminThreadActionsProps) {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
@@ -33,9 +33,9 @@ export default function AdminThreadActions({
             const response = await fetch(`/api/moderation/threads/${threadId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    action, 
-                    reason: action === 'delete' || action === 'flag' ? 'Admin action' : undefined 
+                body: JSON.stringify({
+                    action,
+                    reason: action === 'delete' || action === 'flag' ? 'Admin action' : undefined
                 })
             })
 

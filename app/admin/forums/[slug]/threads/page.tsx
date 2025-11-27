@@ -5,10 +5,10 @@ import Link from "next/link"
 import { formatDistanceToNow } from 'date-fns'
 import AdminThreadActions from '@/app/admin/forums/[slug]/threads/AdminThreadActions'
 
-export default async function AdminForumThreadsPage({ 
-    params 
-}: { 
-    params: Promise<{ slug: string }> 
+export default async function AdminForumThreadsPage({
+    params
+}: {
+    params: Promise<{ slug: string }>
 }) {
     const { slug } = await params
     const session = await auth()
@@ -51,7 +51,7 @@ export default async function AdminForumThreadsPage({
     return (
         <div className="container mx-auto p-6">
             <div className="mb-6">
-                <Link 
+                <Link
                     href="/admin/forums"
                     className="text-blue-600 dark:text-blue-400 hover:underline text-sm mb-4 inline-block"
                 >
@@ -120,12 +120,11 @@ export default async function AdminForumThreadsPage({
                                     </div>
                                 </td>
                                 <td className="py-3 px-4">
-                                    <span className={`px-2 py-1 rounded text-xs ${
-                                        thread.status === 'ACTIVE' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :
-                                        thread.status === 'LOCKED' ? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300' :
-                                        thread.status === 'FLAGGED' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' :
-                                        'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                                    }`}>
+                                    <span className={`px-2 py-1 rounded text-xs ${thread.status === 'ACTIVE' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :
+                                            thread.status === 'LOCKED' ? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300' :
+                                                thread.status === 'FLAGGED' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' :
+                                                    'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                                        }`}>
                                         {thread.status}
                                     </span>
                                 </td>
@@ -133,7 +132,7 @@ export default async function AdminForumThreadsPage({
                                     {formatDistanceToNow(new Date(thread.createdAt), { addSuffix: true })}
                                 </td>
                                 <td className="py-3 px-4">
-                                    <AdminThreadActions 
+                                    <AdminThreadActions
                                         threadId={thread.id}
                                         isPinned={thread.isPinned}
                                         isLocked={thread.isLocked}
