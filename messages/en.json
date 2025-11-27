@@ -26,6 +26,22 @@
         "admin": "Admin",
         "newPost": "New Post"
     },
+    "home": {
+        "boosted": "Boosted",
+        "newest": "Newest",
+        "hottest": "Hottest"
+    },
+    "footer": {
+        "tagline": "Premium handmade knives marketplace and community",
+        "navigation": "Navigation",
+        "community": "Community",
+        "legal": "Legal",
+        "discussionForums": "Discussion Forums",
+        "joinCommunity": "Join Community",
+        "termsOfService": "Terms of Service",
+        "privacyPolicy": "Privacy Policy",
+        "allRightsReserved": "All rights reserved"
+    },
     "auth": {
         "signInWithEmail": "Sign in with Email",
         "signInWithGoogle": "Sign in with Google",

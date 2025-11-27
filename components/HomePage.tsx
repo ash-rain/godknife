@@ -59,7 +59,7 @@ export default function HomePage() {
                             : 'bg-white text-gray-700 hover:bg-gray-100'
                             }`}
                     >
-                        {t('post.boosted')}
+                        {t('home.boosted')}
                     </button>
                     <button
                         onClick={() => setSort('newest')}
@@ -68,7 +68,7 @@ export default function HomePage() {
                             : 'bg-white text-gray-700 hover:bg-gray-100'
                             }`}
                     >
-                        {t('nav.home')}
+                        {t('home.newest')}
                     </button>
                     <button
                         onClick={() => setSort('hottest')}
@@ -77,7 +77,7 @@ export default function HomePage() {
                             : 'bg-white text-gray-700 hover:bg-gray-100'
                             }`}
                     >
-                        🔥 Hottest
+                        🔥 {t('home.hottest')}
                     </button>
                 </div>
 

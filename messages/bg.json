@@ -26,6 +26,22 @@
         "admin": "Админ",
         "newPost": "Нова публикация"
     },
+    "home": {
+        "boosted": "Промотирани",
+        "newest": "Най-нови",
+        "hottest": "Най-горещи"
+    },
+    "footer": {
+        "tagline": "Пазар и общност за първокласни ръчно изработени ножове",
+        "navigation": "Навигация",
+        "community": "Общност",
+        "legal": "Правна информация",
+        "discussionForums": "Дискусионни форуми",
+        "joinCommunity": "Присъедини се към общността",
+        "termsOfService": "Условия за ползване",
+        "privacyPolicy": "Политика за поверителност",
+        "allRightsReserved": "Всички права запазени"
+    },
     "auth": {
         "signInWithEmail": "Вход с имейл",
         "signInWithGoogle": "Вход с Google",
