@@ -20,20 +20,30 @@ export async function GET(
         const page = parseInt(searchParams.get('page') || '1')
         const limit = parseInt(searchParams.get('limit') || '20')
         const skip = (page - 1) * limit
+        const includeAll = searchParams.get('includeAll') === 'true'
+
+        // Check if user is admin for includeAll parameter
+        const session = await auth()
+        const isAdmin = session?.user?.isAdmin || false
 
         const forum = await prisma.forum.findUnique({
-            where: { slug, isActive: true }
+            where: { slug }
         })
 
         if (!forum) {
             return NextResponse.json({ error: 'Forum not found' }, { status: 404 })
         }
 
+        // Build where clause based on admin status
+        const whereClause: any = { forumId: forum.id }
+        
+        // For non-admin or when not including all, filter by status
+        if (!includeAll || !isAdmin) {
+            whereClause.status = { in: ['ACTIVE', 'LOCKED'] }
+        }
+
         const threads = await prisma.thread.findMany({
-            where: {
-                forumId: forum.id,
-                status: { in: ['ACTIVE', 'LOCKED'] }
-            },
+            where: whereClause,
             orderBy: [
                 { isPinned: 'desc' },
                 { createdAt: 'desc' }
@@ -56,10 +66,7 @@ export async function GET(
         })
 
         const total = await prisma.thread.count({
-            where: {
-                forumId: forum.id,
-                status: { in: ['ACTIVE', 'LOCKED'] }
-            }
+            where: whereClause
         })
 
         return NextResponse.json({
