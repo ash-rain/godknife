@@ -46,10 +46,17 @@ export default async function ForumPage({ params }: { params: Promise<{ slug: st
 
     const session = await auth()
 
+    // Serialize dates for client component
+    const serializedThreads = threads.map(thread => ({
+        ...thread,
+        createdAt: thread.createdAt.toISOString(),
+        updatedAt: thread.updatedAt.toISOString()
+    }))
+
     return (
         <ForumPageClient
             forum={forum}
-            threads={threads}
+            threads={serializedThreads}
             hasSession={!!session?.user}
         />
     )
