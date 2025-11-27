@@ -11,10 +11,10 @@ const createCommentSchema = z.object({
 // GET /api/threads/[id]/comments - Get comments for a thread
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = params
+        const { id } = await params
 
         const comments = await prisma.threadComment.findMany({
             where: {
@@ -61,9 +61,10 @@ export async function GET(
 // POST /api/threads/[id]/comments - Add a comment to a thread
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await params
         const session = await auth()
 
         if (!session?.user) {
@@ -79,8 +80,6 @@ export async function POST(
         if (user?.isBanned) {
             return NextResponse.json({ error: 'You are banned from commenting' }, { status: 403 })
         }
-
-        const { id } = params
 
         // Check if thread exists and is not locked
         const thread = await prisma.thread.findUnique({

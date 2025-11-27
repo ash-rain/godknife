@@ -15,10 +15,10 @@ const updateForumSchema = z.object({
 // GET /api/forums/[slug] - Get a specific forum with threads
 export async function GET(
     request: NextRequest,
-    { params }: { params: { slug: string } }
+    { params }: { params: Promise<{ slug: string }> }
 ) {
     try {
-        const { slug } = params
+        const { slug } = await params
         const { searchParams } = new URL(request.url)
         const page = parseInt(searchParams.get('page') || '1')
         const limit = parseInt(searchParams.get('limit') || '20')
@@ -89,7 +89,7 @@ export async function GET(
 // PATCH /api/forums/[slug] - Update a forum (admin only)
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { slug: string } }
+    { params }: { params: Promise<{ slug: string }> }
 ) {
     try {
         const session = await auth()
@@ -102,7 +102,7 @@ export async function PATCH(
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
         }
 
-        const { slug } = params
+        const { slug } = await params
         const body = await request.json()
         const validatedData = updateForumSchema.parse(body)
 
@@ -124,7 +124,7 @@ export async function PATCH(
 // DELETE /api/forums/[slug] - Delete a forum (admin only)
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { slug: string } }
+    { params }: { params: Promise<{ slug: string }> }
 ) {
     try {
         const session = await auth()
@@ -137,7 +137,7 @@ export async function DELETE(
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
         }
 
-        const { slug } = params
+        const { slug } = await params
 
         await prisma.forum.delete({
             where: { slug }

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { formatDistanceToNow } from 'date-fns'
-import AdminThreadActions from '@/app/admin/forums/[slug]/threads/AdminThreadActions'
+import AdminThreadActions from './AdminThreadActions'
 
 export default async function AdminForumThreadsPage({
     params
@@ -121,9 +121,9 @@ export default async function AdminForumThreadsPage({
                                 </td>
                                 <td className="py-3 px-4">
                                     <span className={`px-2 py-1 rounded text-xs ${thread.status === 'ACTIVE' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :
-                                            thread.status === 'LOCKED' ? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300' :
-                                                thread.status === 'FLAGGED' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' :
-                                                    'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                                        thread.status === 'LOCKED' ? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300' :
+                                            thread.status === 'FLAGGED' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' :
+                                                'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
                                         }`}>
                                         {thread.status}
                                     </span>
