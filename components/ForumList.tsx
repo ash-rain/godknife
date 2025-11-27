@@ -20,9 +20,9 @@ interface Forum {
         createdAt: string
         author: {
             id: string
-            username: string
-            name: string
-            image?: string
+            username: string | null
+            name: string | null
+            image: string | null
         }
     }>
 }
