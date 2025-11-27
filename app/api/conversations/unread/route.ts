@@ -38,10 +38,10 @@ export async function GET(req: NextRequest) {
         const unreadCount = conversations.filter((conv) => {
             const participant = conv.participants[0]
             const lastMessage = conv.messages[0]
-            
+
             if (!lastMessage) return false // No messages = nothing to read
             if (!participant.lastReadAt) return true // Never read = unread
-            
+
             // Check if last message is newer than lastReadAt
             return new Date(lastMessage.createdAt) > new Date(participant.lastReadAt)
         }).length

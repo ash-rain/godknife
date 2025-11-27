@@ -255,7 +255,7 @@ export default function MessagesPage() {
                                 const otherUser = getOtherParticipant(conversation)
                                 const lastMessage = conversation.messages[0]
                                 const isSelected = selectedConversation?.id === conversation.id
-                                
+
                                 // Check if conversation is unread
                                 const myParticipant = conversation.participants.find(
                                     (p) => p.user.id === session?.user?.id
@@ -269,9 +269,8 @@ export default function MessagesPage() {
                                     <div
                                         key={conversation.id}
                                         onClick={() => handleSelectConversation(conversation)}
-                                        className={`flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50 transition ${
-                                            isSelected ? 'bg-blue-50' : isUnread ? 'bg-blue-50/30 border-l-4 border-blue-500' : ''
-                                        }`}
+                                        className={`flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50 transition ${isSelected ? 'bg-blue-50' : isUnread ? 'bg-blue-50/30 border-l-4 border-blue-500' : ''
+                                            }`}
                                     >
                                         {/* Avatar */}
                                         <div className="relative shrink-0">
@@ -299,24 +298,21 @@ export default function MessagesPage() {
                                                     {isUnread && (
                                                         <div className="w-2.5 h-2.5 bg-blue-500 rounded-full shrink-0"></div>
                                                     )}
-                                                    <h3 className={`text-gray-900 truncate ${
-                                                        isUnread ? 'font-bold' : 'font-semibold'
-                                                    }`}>
+                                                    <h3 className={`text-gray-900 truncate ${isUnread ? 'font-bold' : 'font-semibold'
+                                                        }`}>
                                                         {otherUser?.name || 'Unknown User'}
                                                     </h3>
                                                 </div>
                                                 {lastMessage && (
-                                                    <span className={`text-xs ml-2 shrink-0 ${
-                                                        isUnread ? 'text-blue-600 font-semibold' : 'text-gray-500'
-                                                    }`}>
+                                                    <span className={`text-xs ml-2 shrink-0 ${isUnread ? 'text-blue-600 font-semibold' : 'text-gray-500'
+                                                        }`}>
                                                         {formatTime(lastMessage.createdAt)}
                                                     </span>
                                                 )}
                                             </div>
                                             {lastMessage && (
-                                                <p className={`text-sm truncate ${
-                                                    isUnread ? 'text-gray-900 font-semibold' : 'text-gray-600'
-                                                }`}>
+                                                <p className={`text-sm truncate ${isUnread ? 'text-gray-900 font-semibold' : 'text-gray-600'
+                                                    }`}>
                                                     {lastMessage.senderId === session?.user?.id && 'You: '}
                                                     {lastMessage.content}
                                                 </p>
