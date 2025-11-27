@@ -81,7 +81,7 @@ export default async function ThreadPage({ params }: { params: Promise<{ id: str
     prisma.thread.update({
         where: { id },
         data: { views: { increment: 1 } }
-    }).catch(() => {})
+    }).catch(() => { })
 
     // Serialize dates for client component
     const serializedThread = {
