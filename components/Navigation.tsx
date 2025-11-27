@@ -3,9 +3,10 @@
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { useLanguage } from './LanguageProvider'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { Menu, X, MessageSquare, User, Settings, LogOut, Home, Plus, Users } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useNotifications } from '@/hooks/usePusher'
 
 interface NavigationProps {
     onCreatePost?: () => void
@@ -17,7 +18,32 @@ export default function Navigation({ onCreatePost }: NavigationProps) {
     const router = useRouter()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [profileMenuOpen, setProfileMenuOpen] = useState(false)
+    const [unreadCount, setUnreadCount] = useState(0)
     const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+    // Fetch unread conversations count
+    const fetchUnreadCount = useCallback(async () => {
+        if (session?.user?.id) {
+            try {
+                const response = await fetch('/api/conversations/unread')
+                if (response.ok) {
+                    const data = await response.json()
+                    setUnreadCount(data.count || 0)
+                }
+            } catch (error) {
+                console.error('Failed to fetch unread count:', error)
+            }
+        }
+    }, [session?.user?.id])
+
+    useEffect(() => {
+        fetchUnreadCount()
+    }, [fetchUnreadCount])
+
+    // Real-time updates via Pusher
+    useNotifications({
+        onNewMessage: fetchUnreadCount,
+    })
 
     const handleCreatePost = () => {
         if (!session) {
@@ -62,6 +88,11 @@ export default function Navigation({ onCreatePost }: NavigationProps) {
                                 >
                                     <MessageSquare className="h-5 w-5" />
                                     <span>{t('nav.messages')}</span>
+                                    {unreadCount > 0 && (
+                                        <span className="bg-red-500 text-white text-xs font-bold rounded-full px-2 py-0.5 min-w-5 text-center">
+                                            {unreadCount > 9 ? '9+' : unreadCount}
+                                        </span>
+                                    )}
                                 </Link>
                             )}
                         </div>
@@ -196,6 +227,11 @@ export default function Navigation({ onCreatePost }: NavigationProps) {
                                 >
                                     <MessageSquare className="h-5 w-5" />
                                     <span>{t('nav.messages')}</span>
+                                    {unreadCount > 0 && (
+                                        <span className="bg-red-500 text-white text-xs font-bold rounded-full px-2 py-0.5 min-w-5 text-center ml-auto">
+                                            {unreadCount > 9 ? '9+' : unreadCount}
+                                        </span>
+                                    )}
                                 </Link>
 
                                 <Link

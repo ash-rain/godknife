@@ -29,6 +29,7 @@ interface Conversation {
     id: string
     participants: Array<{
         user: User
+        lastReadAt: string | null
     }>
     messages: Message[]
     updatedAt: string
@@ -254,13 +255,23 @@ export default function MessagesPage() {
                                 const otherUser = getOtherParticipant(conversation)
                                 const lastMessage = conversation.messages[0]
                                 const isSelected = selectedConversation?.id === conversation.id
+                                
+                                // Check if conversation is unread
+                                const myParticipant = conversation.participants.find(
+                                    (p) => p.user.id === session?.user?.id
+                                )
+                                const isUnread = lastMessage && (
+                                    !myParticipant?.lastReadAt ||
+                                    new Date(lastMessage.createdAt) > new Date(myParticipant.lastReadAt)
+                                )
 
                                 return (
                                     <div
                                         key={conversation.id}
                                         onClick={() => handleSelectConversation(conversation)}
-                                        className={`flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50 transition ${isSelected ? 'bg-blue-50' : ''
-                                            }`}
+                                        className={`flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-50 transition ${
+                                            isSelected ? 'bg-blue-50' : isUnread ? 'bg-blue-50/30 border-l-4 border-blue-500' : ''
+                                        }`}
                                     >
                                         {/* Avatar */}
                                         <div className="relative shrink-0">
@@ -284,17 +295,28 @@ export default function MessagesPage() {
                                         {/* Conversation Info */}
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center justify-between mb-1">
-                                                <h3 className="font-semibold text-gray-900 truncate">
-                                                    {otherUser?.name || 'Unknown User'}
-                                                </h3>
+                                                <div className="flex items-center gap-2 flex-1 min-w-0">
+                                                    {isUnread && (
+                                                        <div className="w-2.5 h-2.5 bg-blue-500 rounded-full shrink-0"></div>
+                                                    )}
+                                                    <h3 className={`text-gray-900 truncate ${
+                                                        isUnread ? 'font-bold' : 'font-semibold'
+                                                    }`}>
+                                                        {otherUser?.name || 'Unknown User'}
+                                                    </h3>
+                                                </div>
                                                 {lastMessage && (
-                                                    <span className="text-xs text-gray-500 ml-2 shrink-0">
+                                                    <span className={`text-xs ml-2 shrink-0 ${
+                                                        isUnread ? 'text-blue-600 font-semibold' : 'text-gray-500'
+                                                    }`}>
                                                         {formatTime(lastMessage.createdAt)}
                                                     </span>
                                                 )}
                                             </div>
                                             {lastMessage && (
-                                                <p className="text-sm text-gray-600 truncate">
+                                                <p className={`text-sm truncate ${
+                                                    isUnread ? 'text-gray-900 font-semibold' : 'text-gray-600'
+                                                }`}>
                                                     {lastMessage.senderId === session?.user?.id && 'You: '}
                                                     {lastMessage.content}
                                                 </p>

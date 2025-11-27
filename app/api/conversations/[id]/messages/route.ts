@@ -121,6 +121,28 @@ export async function POST(
             message
         )
 
+        // Notify recipient about new message
+        const conversation = await prisma.conversation.findUnique({
+            where: { id },
+            include: {
+                participants: true,
+            },
+        })
+
+        const recipient = conversation?.participants.find(
+            (p) => p.userId !== session.user.id
+        )
+        if (recipient) {
+            await pusherServer.trigger(
+                `user-${recipient.userId}`,
+                'new-message',
+                {
+                    conversationId: id,
+                    message,
+                }
+            )
+        }
+
         return NextResponse.json(message, { status: 201 })
     } catch (error) {
         console.error('Send message error:', error)

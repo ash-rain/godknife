@@ -164,6 +164,21 @@ export async function POST(req: NextRequest) {
             newMessage
         )
 
+        // Notify recipient about new message
+        const recipient = conversation.participants.find(
+            (p) => p.userId !== session.user.id
+        )
+        if (recipient) {
+            await pusherServer.trigger(
+                `user-${recipient.userId}`,
+                'new-message',
+                {
+                    conversationId: conversation.id,
+                    message: newMessage,
+                }
+            )
+        }
+
         return NextResponse.json({
             conversation,
             message: newMessage,
