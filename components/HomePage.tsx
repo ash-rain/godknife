@@ -6,6 +6,7 @@ import { useLanguage } from '@/components/LanguageProvider'
 import Navigation from '@/components/Navigation'
 import PostCard from '@/components/PostCard'
 import PostCreateModal from '@/components/PostCreateModal'
+import Link from 'next/link'
 
 interface Post {
     id: string
@@ -20,17 +21,40 @@ interface Post {
     }
 }
 
+interface HeroContent {
+    title: string
+    subtitle: string
+}
+
 export default function HomePage() {
     const { data: session } = useSession()
-    const { t } = useLanguage()
+    const { t, locale } = useLanguage()
     const [posts, setPosts] = useState<Post[]>([])
     const [loading, setLoading] = useState(true)
     const [sort, setSort] = useState<'newest' | 'hottest' | 'boosted'>('boosted')
     const [showCreateModal, setShowCreateModal] = useState(false)
+    const [heroContent, setHeroContent] = useState<HeroContent | null>(null)
 
     useEffect(() => {
+        fetchHeroContent()
         fetchPosts()
-    }, [sort])
+    }, [sort, locale])
+
+    const fetchHeroContent = async () => {
+        try {
+            const response = await fetch('/api/pages/hero')
+            if (response.ok) {
+                const data = await response.json()
+                const page = data.page
+                setHeroContent({
+                    title: locale === 'en' ? page.titleEn : page.titleBg,
+                    subtitle: locale === 'en' ? page.contentEn : page.contentBg
+                })
+            }
+        } catch (error) {
+            console.error('Error fetching hero content:', error)
+        }
+    }
 
     const fetchPosts = async () => {
         try {
@@ -50,7 +74,37 @@ export default function HomePage() {
         <div className="min-h-screen bg-gray-50">
             <Navigation onCreatePost={() => setShowCreateModal(true)} />
 
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {/* Hero Section */}
+            <div className="bg-linear-to-r from-blue-600 to-blue-800 text-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                    <div className="text-center">
+                        <h1 className="text-4xl md:text-6xl font-bold mb-6">
+                            {heroContent?.title || t('pages.hero.title')}
+                        </h1>
+                        <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-90">
+                            {heroContent?.subtitle || t('pages.hero.subtitle')}
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                            <Link
+                                href="#posts"
+                                className="px-8 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition"
+                            >
+                                {t('pages.hero.browseKnives')}
+                            </Link>
+                            {session && (
+                                <button
+                                    onClick={() => setShowCreateModal(true)}
+                                    className="px-8 py-3 bg-blue-700 text-white rounded-lg font-semibold hover:bg-blue-800 transition border-2 border-white"
+                                >
+                                    {t('pages.hero.sellYourKnife')}
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <main id="posts" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="flex gap-4 mb-6">
                     <button
                         onClick={() => setSort('boosted')}

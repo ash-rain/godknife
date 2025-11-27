@@ -7,6 +7,7 @@ type Language = 'en' | 'bg'
 
 interface LanguageContextType {
     language: Language
+    locale: Language
     setLanguage: (lang: Language) => void
     t: (key: string) => string
 }
@@ -54,7 +55,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <LanguageContext.Provider value={{ language, setLanguage, t }}>
+        <LanguageContext.Provider value={{ language, locale: language, setLanguage, t }}>
             {children}
         </LanguageContext.Provider>
     )

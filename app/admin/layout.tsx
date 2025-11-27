@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import Link from "next/link"
-import { LayoutDashboard, Users, FileText, Settings, MessageSquare } from "lucide-react"
+import { LayoutDashboard, Users, FileText, Settings, MessageSquare, FileCode } from "lucide-react"
 
 export default async function AdminLayout({
     children,
@@ -23,6 +23,7 @@ export default async function AdminLayout({
         { href: '/admin/users', label: 'Users', icon: Users },
         { href: '/admin/posts', label: 'Posts', icon: FileText },
         { href: '/admin/forums', label: 'Forums', icon: MessageSquare },
+        { href: '/admin/pages', label: 'Pages', icon: FileCode },
         { href: '/admin/settings', label: 'Settings', icon: Settings },
     ]
 

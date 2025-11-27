@@ -357,3 +357,17 @@ model UserBan {
   @@index([isActive])
   @@index([expiresAt])
 }
+
+model StaticPage {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  titleEn   String
+  titleBg   String
+  contentEn String   @db.Text
+  contentBg String   @db.Text
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+}

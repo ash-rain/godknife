@@ -118,6 +118,7 @@
         "payments": "Payments",
         "settings": "Settings",
         "moderation": "Moderation",
+        "pages": "Pages",
         "totalUsers": "Total Users",
         "totalPosts": "Total Posts",
         "totalRevenue": "Total Revenue",
@@ -126,6 +127,34 @@
         "reject": "Reject",
         "banUser": "Ban User",
         "deletePost": "Delete Post"
+    },
+    "pages": {
+        "managePages": "Manage Pages",
+        "createPage": "Create Page",
+        "editPage": "Edit Page",
+        "slug": "Slug",
+        "titleEn": "Title (English)",
+        "titleBg": "Title (Bulgarian)",
+        "contentEn": "Content (English)",
+        "contentBg": "Content (Bulgarian)",
+        "isActive": "Active",
+        "lastUpdated": "Last Updated",
+        "actions": "Actions",
+        "saveChanges": "Save Changes",
+        "hero": {
+            "title": "Premium Handmade Knives",
+            "subtitle": "Discover exceptional craftsmanship from master knife makers around the world. Buy, sell, and showcase your finest blades.",
+            "browseKnives": "Browse Knives",
+            "sellYourKnife": "Sell Your Knife"
+        },
+        "terms": {
+            "title": "Terms of Service",
+            "content": "# Terms of Service\n\nLast updated: November 27, 2025\n\n## 1. Acceptance of Terms\n\nBy accessing and using GodKnife, you accept and agree to be bound by the terms and provision of this agreement.\n\n## 2. Use License\n\nPermission is granted to temporarily access the materials on GodKnife for personal, non-commercial transitory viewing only.\n\n## 3. User Content\n\nUsers are responsible for the content they post. You retain ownership of your content but grant us a license to display it on our platform.\n\n## 4. Prohibited Activities\n\n- Posting illegal content\n- Harassing other users\n- Attempting to breach security\n- Selling counterfeit items\n\n## 5. Termination\n\nWe may terminate or suspend access to our service immediately, without prior notice, for conduct that we believe violates these Terms.\n\n## 6. Limitation of Liability\n\nGodKnife shall not be liable for any indirect, incidental, special, consequential or punitive damages.\n\n## 7. Contact Us\n\nIf you have any questions about these Terms, please contact us."
+        },
+        "privacy": {
+            "title": "Privacy Policy",
+            "content": "# Privacy Policy\n\nLast updated: November 27, 2025\n\n## 1. Information We Collect\n\nWe collect information you provide directly to us, including:\n- Name and email address\n- Profile information\n- Posts and comments\n- Payment information\n\n## 2. How We Use Your Information\n\nWe use the information we collect to:\n- Provide and improve our services\n- Process transactions\n- Send you updates and marketing communications\n- Respond to your comments and questions\n\n## 3. Information Sharing\n\nWe do not sell your personal information. We may share your information with:\n- Service providers who assist in our operations\n- Law enforcement when required by law\n\n## 4. Data Security\n\nWe implement appropriate security measures to protect your personal information.\n\n## 5. Your Rights\n\nYou have the right to:\n- Access your personal data\n- Request correction of your data\n- Request deletion of your data\n- Object to processing of your data\n\n## 6. Cookies\n\nWe use cookies to improve your experience on our site.\n\n## 7. Changes to This Policy\n\nWe may update this privacy policy from time to time. We will notify you of any changes by posting the new policy on this page.\n\n## 8. Contact Us\n\nIf you have any questions about this Privacy Policy, please contact us."
+        }
     },
     "limits": {
         "freePostLimit": "You've used your free post this week",
