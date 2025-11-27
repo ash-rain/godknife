@@ -3,10 +3,16 @@ import type { NextRequest } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 
 export async function middleware(request: NextRequest) {
+    // Use the same secret configuration as NextAuth
     const token = await getToken({
         req: request,
-        secret: process.env.NEXTAUTH_SECRET
+        secret: process.env.NEXTAUTH_SECRET,
+        // Specify the cookie name explicitly to match NextAuth behavior
+        cookieName: process.env.NODE_ENV === 'production' 
+            ? '__Secure-next-auth.session-token' 
+            : 'next-auth.session-token'
     })
+    
     const isAuth = !!token
     const isAuthPage = request.nextUrl.pathname.startsWith('/auth')
     const isAdminPage = request.nextUrl.pathname.startsWith('/admin')
