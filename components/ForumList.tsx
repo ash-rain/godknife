@@ -61,7 +61,7 @@ export default function ForumList({ initialForums }: ForumListProps) {
                                         e.stopPropagation()
                                         router.push(`/forums/${forum.slug}/new-thread`)
                                     }}
-                                    className="px-3 py-1 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition"
+                                    className="px-3 py-1 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition"
                                 >
                                     {t('forum.newThread')}
                                 </button>

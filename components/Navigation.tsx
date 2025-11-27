@@ -5,6 +5,7 @@ import { useSession, signOut } from 'next-auth/react'
 import { useLanguage } from './LanguageProvider'
 import { useState, useRef } from 'react'
 import { Menu, X, MessageSquare, User, Settings, LogOut, Home, Plus, Users } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 interface NavigationProps {
     onCreatePost?: () => void
@@ -13,9 +14,18 @@ interface NavigationProps {
 export default function Navigation({ onCreatePost }: NavigationProps) {
     const { data: session } = useSession()
     const { t, language, setLanguage } = useLanguage()
+    const router = useRouter()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [profileMenuOpen, setProfileMenuOpen] = useState(false)
     const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+    const handleCreatePost = () => {
+        if (!session) {
+            router.push('/auth/signin')
+        } else if (onCreatePost) {
+            onCreatePost()
+        }
+    }
 
     return (
         <nav className="bg-white shadow-sm">
@@ -46,30 +56,25 @@ export default function Navigation({ onCreatePost }: NavigationProps) {
                             </Link>
 
                             {session && (
-                                <>
-                                    <Link
-                                        href="/messages"
-                                        className="inline-flex items-center gap-2 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition"
-                                    >
-                                        <MessageSquare className="h-5 w-5" />
-                                        <span>{t('nav.messages')}</span>
-                                    </Link>
-
-                                    {onCreatePost && (
-                                        <button
-                                            onClick={onCreatePost}
-                                            className="inline-flex items-center gap-2 px-3 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-md transition"
-                                        >
-                                            <Plus className="h-5 w-5" />
-                                            <span>{t('post.createPost')}</span>
-                                        </button>
-                                    )}
-                                </>
+                                <Link
+                                    href="/messages"
+                                    className="inline-flex items-center gap-2 px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition"
+                                >
+                                    <MessageSquare className="h-5 w-5" />
+                                    <span>{t('nav.messages')}</span>
+                                </Link>
                             )}
                         </div>
                     </div>
 
                     <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
+                        <button
+                            onClick={handleCreatePost}
+                            className="inline-flex items-center gap-2 px-3 py-2 bg-green-600 text-white hover:bg-green-700 rounded-md transition"
+                        >
+                            <Plus className="h-5 w-5" />
+                            <span>{t('post.createPost')}</span>
+                        </button>
                         <select
                             value={language}
                             onChange={(e) => setLanguage(e.target.value as 'en' | 'bg')}
@@ -171,6 +176,17 @@ export default function Navigation({ onCreatePost }: NavigationProps) {
                             <Users className="h-5 w-5" />
                             <span>{t('nav.forums')}</span>
                         </Link>
+                        <button
+                            onClick={() => {
+                                setMobileMenuOpen(false)
+                                handleCreatePost()
+                            }}
+                            className="flex items-center gap-2 w-full pl-3 pr-4 py-2 text-base font-medium text-green-600"
+                        >
+                            <Plus className="h-5 w-5" />
+                            <span>{t('post.createPost')}</span>
+                        </button>
+
                         {session && (
                             <>
                                 <Link
@@ -181,19 +197,6 @@ export default function Navigation({ onCreatePost }: NavigationProps) {
                                     <MessageSquare className="h-5 w-5" />
                                     <span>{t('nav.messages')}</span>
                                 </Link>
-
-                                {onCreatePost && (
-                                    <button
-                                        onClick={() => {
-                                            onCreatePost()
-                                            setMobileMenuOpen(false)
-                                        }}
-                                        className="flex items-center gap-2 w-full pl-3 pr-4 py-2 text-base font-medium text-blue-600"
-                                    >
-                                        <Plus className="h-5 w-5" />
-                                        <span>{t('post.createPost')}</span>
-                                    </button>
-                                )}
 
                                 <Link
                                     href={`/u/${session.user?.username || 'profile'}`}
