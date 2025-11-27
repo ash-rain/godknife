@@ -28,18 +28,26 @@ export async function GET(req: NextRequest) {
                 messages: {
                     orderBy: { createdAt: 'desc' },
                     take: 1,
+                    include: {
+                        sender: {
+                            select: {
+                                id: true,
+                            },
+                        },
+                    },
                 },
             },
         })
 
         // Count conversations where:
-        // 1. lastReadAt is null (never read), OR
-        // 2. Latest message exists and was created after lastReadAt
+        // 1. Latest message is from someone else (not current user), AND
+        // 2. lastReadAt is null (never read) OR latest message was created after lastReadAt
         const unreadCount = conversations.filter((conv) => {
             const participant = conv.participants[0]
             const lastMessage = conv.messages[0]
 
             if (!lastMessage) return false // No messages = nothing to read
+            if (lastMessage.sender.id === session.user.id) return false // Own messages don't count as unread
             if (!participant.lastReadAt) return true // Never read = unread
 
             // Check if last message is newer than lastReadAt

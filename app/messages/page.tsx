@@ -260,10 +260,11 @@ export default function MessagesPage() {
                                 const myParticipant = conversation.participants.find(
                                     (p) => p.user.id === session?.user?.id
                                 )
-                                const isUnread = lastMessage && (
-                                    !myParticipant?.lastReadAt ||
-                                    new Date(lastMessage.createdAt) > new Date(myParticipant.lastReadAt)
-                                )
+                                const isUnread = lastMessage &&
+                                    lastMessage.senderId !== session?.user?.id && ( // Don't count own messages as unread
+                                        !myParticipant?.lastReadAt ||
+                                        new Date(lastMessage.createdAt) > new Date(myParticipant.lastReadAt)
+                                    )
 
                                 return (
                                     <div
