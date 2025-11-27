@@ -52,18 +52,18 @@ export default function ForumsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="min-h-screen bg-gray-50">
             <Navigation />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <h1 className="text-4xl font-bold mb-8 text-gray-900 dark:text-gray-100">
+                <h1 className="text-4xl font-bold mb-8 text-gray-900">
                     {t('forum.forums')}
                 </h1>
 
                 {loading ? (
                     <div className="text-center py-12">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                        <p className="mt-4 text-gray-600 dark:text-gray-400">{t('common.loading')}</p>
+                        <p className="mt-4 text-gray-600">{t('common.loading')}</p>
                     </div>
                 ) : (
                     <ForumList initialForums={forums} />

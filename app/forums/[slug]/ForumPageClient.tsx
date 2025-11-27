@@ -43,24 +43,24 @@ export default function ForumPageClient({ forum, threads, hasSession }: ForumPag
     const { t } = useLanguage()
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="min-h-screen bg-gray-50">
             <Navigation />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="mb-8">
                     <a
                         href="/forums"
-                        className="text-blue-600 dark:text-blue-400 hover:underline text-sm mb-4 inline-block"
+                        className="text-blue-600 hover:underline text-sm mb-4 inline-block"
                     >
                         ← {t('forum.backToForums')}
                     </a>
                     <div className="flex justify-between items-start">
                         <div>
-                            <h1 className="text-4xl font-bold mb-2 text-gray-900 dark:text-gray-100">
+                            <h1 className="text-4xl font-bold mb-2 text-gray-900">
                                 {forum.name}
                             </h1>
-                            <p className="text-gray-600 dark:text-gray-400">{forum.description}</p>
-                            <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
+                            <p className="text-gray-600">{forum.description}</p>
+                            <p className="text-sm text-gray-500 mt-2">
                                 {forum._count.threads} {t('forum.threads').toLowerCase()}
                             </p>
                         </div>
@@ -78,8 +78,8 @@ export default function ForumPageClient({ forum, threads, hasSession }: ForumPag
                 <ThreadList threads={threads} forumSlug={forum.slug} />
 
                 {!hasSession && (
-                    <div className="mt-8 bg-gray-100 dark:bg-gray-800 rounded-lg p-4 text-center">
-                        <p className="text-gray-600 dark:text-gray-400 mb-3">
+                    <div className="mt-8 bg-gray-100 rounded-lg p-4 text-center">
+                        <p className="text-gray-600 mb-3">
                             {t('forum.signInToCreateThreads')}
                         </p>
                         <a

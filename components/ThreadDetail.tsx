@@ -141,7 +141,7 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
 
     const renderComment = (comment: ThreadComment, isReply = false) => (
         <div key={comment.id} className={`${isReply ? 'ml-12' : ''} mb-4`}>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+            <div className="bg-white rounded-lg p-4 border border-gray-200">
                 <div className="flex items-start gap-3 mb-3">
                     {comment.author.image ? (
                         <img
@@ -150,7 +150,7 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
                             className="w-10 h-10 rounded-full"
                         />
                     ) : (
-                        <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                        <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
                             <span className="text-lg font-semibold">
                                 {(comment.author.name || comment.author.username || 'U')[0].toUpperCase()}
                             </span>
@@ -162,22 +162,22 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
                                 {comment.author.username || comment.author.name}
                             </span>
                             {comment.author.isBanned && (
-                                <span className="px-2 py-0.5 bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 text-xs rounded">
+                                <span className="px-2 py-0.5 bg-red-100 text-red-800 text-xs rounded">
                                     Banned
                                 </span>
                             )}
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                            <span className="text-sm text-gray-500">
                                 {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
                             </span>
                         </div>
-                        <p className="mt-2 text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                        <p className="mt-2 text-gray-700 whitespace-pre-wrap">
                             {comment.content}
                         </p>
                         <div className="mt-3 flex gap-3">
                             {currentUserId && !thread.isLocked && (
                                 <button
                                     onClick={() => setReplyTo(comment.id)}
-                                    className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                                    className="text-sm text-blue-600 hover:underline"
                                 >
                                     {t('forum.reply')}
                                 </button>
@@ -186,13 +186,13 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
                                 <>
                                     <button
                                         onClick={() => handleModerateComment(comment.id, 'delete')}
-                                        className="text-sm text-red-600 dark:text-red-400 hover:underline"
+                                        className="text-sm text-red-600 hover:underline"
                                     >
                                         {t('common.delete')}
                                     </button>
                                     <button
                                         onClick={() => handleModerateComment(comment.id, 'flag')}
-                                        className="text-sm text-yellow-600 dark:text-yellow-400 hover:underline"
+                                        className="text-sm text-yellow-600 hover:underline"
                                     >
                                         {t('forum.flag')}
                                     </button>
@@ -205,7 +205,7 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
                                     value={newComment}
                                     onChange={(e) => setNewComment(e.target.value)}
                                     placeholder={t('forum.writeReply')}
-                                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                                    className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900"
                                     rows={3}
                                 />
                                 <div className="flex gap-2 mt-2">
@@ -221,7 +221,7 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
                                             setReplyTo(null)
                                             setNewComment('')
                                         }}
-                                        className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition"
+                                        className="px-4 py-2 bg-gray-300 text-gray-900 rounded-lg hover:bg-gray-400 transition"
                                     >
                                         {t('forum.cancel')}
                                     </button>
@@ -238,65 +238,65 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
     return (
         <div className="max-w-4xl mx-auto">
             {/* Thread Header */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6 border border-gray-200 dark:border-gray-700">
+            <div className="bg-white rounded-lg p-6 mb-6 border border-gray-200">
                 <div className="mb-4">
                     <a
                         href={`/forums/${thread.forum.slug}`}
-                        className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
+                        className="text-blue-600 hover:underline text-sm"
                     >
                         ← {t('forum.backToForum')} {thread.forum.name}
                     </a>
                 </div>
                 <div className="flex items-start gap-2 mb-4">
                     {thread.isPinned && (
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 text-xs rounded">
+                        <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">
                             {t('forum.pinned')}
                         </span>
                     )}
                     {thread.isLocked && (
-                        <span className="px-2 py-1 bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300 text-xs rounded">
+                        <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded">
                             {t('forum.locked')}
                         </span>
                     )}
                     <h1 className="text-3xl font-bold flex-1">{thread.title}</h1>
                 </div>
-                <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-4">
+                <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
                     <span>{t('forum.by')} {thread.author.username || thread.author.name}</span>
                     <span>•</span>
                     <span>{formatDistanceToNow(new Date(thread.createdAt), { addSuffix: true })}</span>
                     <span>•</span>
                     <span>{thread.views} {t('forum.views')}</span>
                 </div>
-                <div className="prose dark:prose-invert max-w-none">
+                <div className="prose max-w-none">
                     <p className="whitespace-pre-wrap">{thread.content}</p>
                 </div>
 
                 {/* Moderation Actions */}
                 {isModerator && (
-                    <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <div className="mt-6 pt-4 border-t border-gray-200">
                         <h3 className="font-semibold mb-3">{t('forum.moderationActions')}</h3>
                         <div className="flex gap-2 flex-wrap">
                             <button
                                 onClick={() => handleModerateThread(thread.isPinned ? 'unpin' : 'pin')}
-                                className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800 text-sm"
+                                className="px-3 py-1 bg-blue-100 text-blue-800 rounded hover:bg-blue-200 text-sm"
                             >
                                 {thread.isPinned ? t('forum.unpin') : t('forum.pin')}
                             </button>
                             <button
                                 onClick={() => handleModerateThread(thread.isLocked ? 'unlock' : 'lock')}
-                                className="px-3 py-1 bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-800 text-sm"
+                                className="px-3 py-1 bg-gray-100 text-gray-800 rounded hover:bg-gray-200 text-sm"
                             >
                                 {thread.isLocked ? t('forum.unlock') : t('forum.lock')}
                             </button>
                             <button
                                 onClick={() => handleModerateThread('flag')}
-                                className="px-3 py-1 bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 rounded hover:bg-yellow-200 dark:hover:bg-yellow-800 text-sm"
+                                className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200 text-sm"
                             >
                                 {t('forum.flag')}
                             </button>
                             <button
                                 onClick={() => handleModerateThread('delete')}
-                                className="px-3 py-1 bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 rounded hover:bg-red-200 dark:hover:bg-red-800 text-sm"
+                                className="px-3 py-1 bg-red-100 text-red-800 rounded hover:bg-red-200 text-sm"
                             >
                                 {t('forum.deleteThread')}
                             </button>
@@ -313,13 +313,13 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
 
             {/* New Comment Form */}
             {currentUserId && !thread.isLocked && (
-                <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                <div className="bg-white rounded-lg p-6 border border-gray-200">
                     <h3 className="font-semibold mb-3">{t('forum.addComment')}</h3>
                     <textarea
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder={t('forum.writeComment')}
-                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900"
                         rows={4}
                     />
                     <button
@@ -333,14 +333,14 @@ export default function ThreadDetail({ thread, currentUserId, isModerator }: Thr
             )}
 
             {thread.isLocked && (
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 text-center text-gray-600 dark:text-gray-400">
+                <div className="bg-gray-100 rounded-lg p-4 text-center text-gray-600">
                     {t('forum.threadLocked')}
                 </div>
             )}
 
             {!currentUserId && (
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 text-center">
-                    <p className="text-gray-600 dark:text-gray-400 mb-3">
+                <div className="bg-gray-100 rounded-lg p-4 text-center">
+                    <p className="text-gray-600 mb-3">
                         {t('forum.signInToComment')}
                     </p>
                     <a

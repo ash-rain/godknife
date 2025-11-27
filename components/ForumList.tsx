@@ -41,7 +41,7 @@ export default function ForumList({ initialForums }: ForumListProps) {
             {forums.map((forum) => (
                 <div
                     key={forum.id}
-                    className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 hover:shadow-lg transition cursor-pointer"
+                    className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition cursor-pointer"
                     onClick={() => router.push(`/forums/${forum.slug}`)}
                 >
                     <div className="flex items-start gap-4">
@@ -66,8 +66,8 @@ export default function ForumList({ initialForums }: ForumListProps) {
                                     {t('forum.newThread')}
                                 </button>
                             </div>
-                            <p className="text-gray-600 dark:text-gray-400 mb-3">{forum.description}</p>
-                            <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-500">
+                            <p className="text-gray-600 mb-3">{forum.description}</p>
+                            <div className="flex items-center gap-4 text-sm text-gray-500">
                                 <span>{forum._count.threads} {t('forum.threads').toLowerCase()}</span>
                                 {forum.threads[0] && (
                                     <span className="flex items-center gap-2">
@@ -83,7 +83,7 @@ export default function ForumList({ initialForums }: ForumListProps) {
             ))}
 
             {forums.length === 0 && (
-                <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                <div className="text-center py-12 text-gray-500">
                     {t('forum.noThreads')}
                 </div>
             )}
