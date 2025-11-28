@@ -10,9 +10,24 @@ interface PostCreateModalProps {
     onSuccess: () => void
 }
 
+interface Category {
+    id: string
+    nameEn: string
+    nameBg: string
+    slug: string
+    subcategories: Subcategory[]
+}
+
+interface Subcategory {
+    id: string
+    nameEn: string
+    nameBg: string
+    slug: string
+}
+
 export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalProps) {
     const { data: session } = useSession()
-    const { t } = useLanguage()
+    const { t, locale } = useLanguage()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [formData, setFormData] = useState({
@@ -20,9 +35,35 @@ export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalP
         description: '',
         price: '',
         isGallery: false,
+        categoryId: '',
+        subcategoryId: '',
     })
     const [images, setImages] = useState<File[]>([])
     const [imagePreviews, setImagePreviews] = useState<string[]>([])
+    const [categories, setCategories] = useState<Category[]>([])
+    const [subcategories, setSubcategories] = useState<Subcategory[]>([])
+
+    useState(() => {
+        fetchCategories()
+    })
+
+    const fetchCategories = async () => {
+        try {
+            const response = await fetch('/api/categories')
+            if (response.ok) {
+                const data = await response.json()
+                setCategories(data.categories)
+            }
+        } catch (error) {
+            console.error('Error fetching categories:', error)
+        }
+    }
+
+    const handleCategoryChange = (categoryId: string) => {
+        setFormData({ ...formData, categoryId, subcategoryId: '' })
+        const category = categories.find(c => c.id === categoryId)
+        setSubcategories(category?.subcategories || [])
+    }
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || [])
@@ -57,6 +98,12 @@ export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalP
                 formDataToSend.append('price', formData.price)
             }
             formDataToSend.append('isGallery', String(formData.isGallery))
+            if (formData.categoryId) {
+                formDataToSend.append('categoryId', formData.categoryId)
+            }
+            if (formData.subcategoryId) {
+                formDataToSend.append('subcategoryId', formData.subcategoryId)
+            }
 
             images.forEach((image, index) => {
                 formDataToSend.append(`image-${index}`, image)
@@ -122,6 +169,44 @@ export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalP
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                         />
                     </div>
+
+                    <div>
+                        <label className="block text-sm font-medium mb-2">
+                            {t('post.category')}
+                        </label>
+                        <select
+                            value={formData.categoryId}
+                            onChange={(e) => handleCategoryChange(e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                        >
+                            <option value="">{t('post.selectCategory')}</option>
+                            {categories.map((cat) => (
+                                <option key={cat.id} value={cat.id}>
+                                    {locale === 'en' ? cat.nameEn : cat.nameBg}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {formData.categoryId && subcategories.length > 0 && (
+                        <div>
+                            <label className="block text-sm font-medium mb-2">
+                                {t('post.subcategory')}
+                            </label>
+                            <select
+                                value={formData.subcategoryId}
+                                onChange={(e) => setFormData({ ...formData, subcategoryId: e.target.value })}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            >
+                                <option value="">{t('post.selectSubcategory')}</option>
+                                {subcategories.map((sub) => (
+                                    <option key={sub.id} value={sub.id}>
+                                        {locale === 'en' ? sub.nameEn : sub.nameBg}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
 
                     <div className="flex items-center space-x-4">
                         <label className="flex items-center">

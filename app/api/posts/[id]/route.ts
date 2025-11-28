@@ -19,6 +19,22 @@ export async function GET(
                         image: true,
                     },
                 },
+                category: {
+                    select: {
+                        id: true,
+                        nameEn: true,
+                        nameBg: true,
+                        slug: true,
+                    },
+                },
+                subcategory: {
+                    select: {
+                        id: true,
+                        nameEn: true,
+                        nameBg: true,
+                        slug: true,
+                    },
+                },
                 _count: {
                     select: {
                         likes: true,

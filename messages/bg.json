@@ -76,7 +76,20 @@
         "noComments": "Все още няма коментари",
         "contactSeller": "Свържи се с продавача",
         "startChat": "Започни чат",
-        "chatAboutPost": "Здравей! Интересувам се от твоята публикация:"
+        "chatAboutPost": "Здравей! Интересувам се от твоята публикация:",
+        "category": "Категория",
+        "subcategory": "Подкатегория",
+        "selectCategory": "Избери категория",
+        "selectSubcategory": "Избери подкатегория"
+    },
+    "search": {
+        "searchResults": "Резултати от търсенето",
+        "query": "Търсене",
+        "allCategories": "Всички категории",
+        "searchPlaceholder": "Търси ножове...",
+        "resultsFound": "намерени резултата",
+        "noResults": "Няма намерени резултати",
+        "tryDifferentSearch": "Опитайте да промените критериите за търсене или филтрите"
     },
     "profile": {
         "editProfile": "Редактирай профил",

@@ -19,6 +19,18 @@ interface Post {
     views: number
     authorId: string
     createdAt: string
+    category?: {
+        id: string
+        nameEn: string
+        nameBg: string
+        slug: string
+    }
+    subcategory?: {
+        id: string
+        nameEn: string
+        nameBg: string
+        slug: string
+    }
     author: {
         id: string
         name: string
@@ -47,7 +59,7 @@ export default function PostDetailPage() {
     const params = useParams()
     const router = useRouter()
     const { data: session } = useSession()
-    const { t } = useLanguage()
+    const { t, locale } = useLanguage()
 
     const [post, setPost] = useState<Post | null>(null)
     const [comments, setComments] = useState<Comment[]>([])
@@ -337,6 +349,24 @@ export default function PostDetailPage() {
                         {/* Details Section */}
                         <div className="space-y-6">
                             <div className="bg-white rounded-lg shadow-md p-6">
+                                {(post.category || post.subcategory) && (
+                                    <div className="mb-4 flex flex-wrap gap-2">
+                                        {post.category && (
+                                            <Link
+                                                href={`/search?category=${post.category.id}`}
+                                                className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium hover:bg-blue-200 transition"
+                                            >
+                                                {locale === 'en' ? post.category.nameEn : post.category.nameBg}
+                                            </Link>
+                                        )}
+                                        {post.subcategory && (
+                                            <span className="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
+                                                {locale === 'en' ? post.subcategory.nameEn : post.subcategory.nameBg}
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
+
                                 <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
 
                                 {post.price && (

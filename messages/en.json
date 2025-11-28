@@ -76,7 +76,20 @@
         "noComments": "No comments yet",
         "contactSeller": "Contact Seller",
         "startChat": "Start Chat",
-        "chatAboutPost": "Hi! I'm interested in your post:"
+        "chatAboutPost": "Hi! I'm interested in your post:",
+        "category": "Category",
+        "subcategory": "Subcategory",
+        "selectCategory": "Select a category",
+        "selectSubcategory": "Select a subcategory"
+    },
+    "search": {
+        "searchResults": "Search Results",
+        "query": "Search",
+        "allCategories": "All Categories",
+        "searchPlaceholder": "Search for knives...",
+        "resultsFound": "results found",
+        "noResults": "No results found",
+        "tryDifferentSearch": "Try adjusting your search terms or filters"
     },
     "profile": {
         "editProfile": "Edit Profile",

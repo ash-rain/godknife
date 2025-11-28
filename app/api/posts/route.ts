@@ -38,6 +38,8 @@ export async function POST(req: NextRequest) {
         const description = formData.get('description') as string
         const price = formData.get('price') ? parseFloat(formData.get('price') as string) : undefined
         const isGallery = formData.get('isGallery') === 'true'
+        const categoryId = formData.get('categoryId') as string | null
+        const subcategoryId = formData.get('subcategoryId') as string | null
 
         // Get all image files
         const imageFiles: File[] = []
@@ -92,6 +94,8 @@ export async function POST(req: NextRequest) {
                 isGallery,
                 images: uploadedImages,
                 authorId: session.user.id,
+                categoryId: categoryId || null,
+                subcategoryId: subcategoryId || null,
             },
             include: {
                 author: {
@@ -100,6 +104,22 @@ export async function POST(req: NextRequest) {
                         name: true,
                         username: true,
                         image: true,
+                    },
+                },
+                category: {
+                    select: {
+                        id: true,
+                        nameEn: true,
+                        nameBg: true,
+                        slug: true,
+                    },
+                },
+                subcategory: {
+                    select: {
+                        id: true,
+                        nameEn: true,
+                        nameBg: true,
+                        slug: true,
                     },
                 },
             },
@@ -125,6 +145,9 @@ export async function GET(req: NextRequest) {
         const limit = parseInt(searchParams.get('limit') || '20')
         const sort = searchParams.get('sort') || 'newest'
         const authorId = searchParams.get('authorId')
+        const categoryId = searchParams.get('categoryId')
+        const subcategoryId = searchParams.get('subcategoryId')
+        const search = searchParams.get('search')
         const skip = (page - 1) * limit
 
         let orderBy: any = { createdAt: 'desc' }
@@ -148,6 +171,21 @@ export async function GET(req: NextRequest) {
             where.authorId = authorId
         }
 
+        if (categoryId) {
+            where.categoryId = categoryId
+        }
+
+        if (subcategoryId) {
+            where.subcategoryId = subcategoryId
+        }
+
+        if (search) {
+            where.OR = [
+                { title: { contains: search, mode: 'insensitive' } },
+                { description: { contains: search, mode: 'insensitive' } },
+            ]
+        }
+
         const [posts, total] = await Promise.all([
             prisma.post.findMany({
                 where,
@@ -161,6 +199,22 @@ export async function GET(req: NextRequest) {
                             name: true,
                             username: true,
                             image: true,
+                        },
+                    },
+                    category: {
+                        select: {
+                            id: true,
+                            nameEn: true,
+                            nameBg: true,
+                            slug: true,
+                        },
+                    },
+                    subcategory: {
+                        select: {
+                            id: true,
+                            nameEn: true,
+                            nameBg: true,
+                            slug: true,
                         },
                     },
                     _count: {

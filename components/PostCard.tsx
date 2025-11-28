@@ -12,6 +12,18 @@ interface Post {
     images: string[]
     price?: number
     isBoosted?: boolean
+    category?: {
+        id: string
+        nameEn: string
+        nameBg: string
+        slug: string
+    }
+    subcategory?: {
+        id: string
+        nameEn: string
+        nameBg: string
+        slug: string
+    }
     _count: {
         likes: number
         comments: number
@@ -23,7 +35,7 @@ interface PostCardProps {
 }
 
 export default function PostCard({ post }: PostCardProps) {
-    const { t, language } = useLanguage()
+    const { t, locale } = useLanguage()
     const imageUrl = post.images[0] ? getImageUrl(post.images[0], 'medium') : '/placeholder.jpg'
 
     return (
@@ -48,6 +60,19 @@ export default function PostCard({ post }: PostCardProps) {
                 </div>
 
                 <div className="p-4">
+                    {post.category && (
+                        <div className="mb-2">
+                            <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                                {locale === 'en' ? post.category.nameEn : post.category.nameBg}
+                            </span>
+                            {post.subcategory && (
+                                <span className="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full ml-1">
+                                    {locale === 'en' ? post.subcategory.nameEn : post.subcategory.nameBg}
+                                </span>
+                            )}
+                        </div>
+                    )}
+
                     <h3 className="font-semibold text-lg mb-2 line-clamp-2">
                         {post.title}
                     </h3>

@@ -26,6 +26,13 @@ interface HeroContent {
     subtitle: string
 }
 
+interface Category {
+    id: string
+    nameEn: string
+    nameBg: string
+    slug: string
+}
+
 export default function HomePage() {
     const { data: session } = useSession()
     const { t, locale } = useLanguage()
@@ -34,9 +41,13 @@ export default function HomePage() {
     const [sort, setSort] = useState<'newest' | 'hottest' | 'boosted'>('boosted')
     const [showCreateModal, setShowCreateModal] = useState(false)
     const [heroContent, setHeroContent] = useState<HeroContent | null>(null)
+    const [categories, setCategories] = useState<Category[]>([])
+    const [searchQuery, setSearchQuery] = useState('')
+    const [selectedCategory, setSelectedCategory] = useState('')
 
     useEffect(() => {
         fetchHeroContent()
+        fetchCategories()
         fetchPosts()
     }, [sort, locale])
 
@@ -54,6 +65,26 @@ export default function HomePage() {
         } catch (error) {
             console.error('Error fetching hero content:', error)
         }
+    }
+
+    const fetchCategories = async () => {
+        try {
+            const response = await fetch('/api/categories')
+            if (response.ok) {
+                const data = await response.json()
+                setCategories(data.categories)
+            }
+        } catch (error) {
+            console.error('Error fetching categories:', error)
+        }
+    }
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault()
+        const params = new URLSearchParams()
+        if (searchQuery) params.append('q', searchQuery)
+        if (selectedCategory) params.append('category', selectedCategory)
+        window.location.href = `/search?${params.toString()}`
     }
 
     const fetchPosts = async () => {
@@ -84,6 +115,41 @@ export default function HomePage() {
                         <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-90">
                             {heroContent?.subtitle || t('pages.hero.subtitle')}
                         </p>
+
+                        {/* Search Bar */}
+                        <form onSubmit={handleSearch} className="max-w-4xl mx-auto mb-8">
+                            <div className="flex flex-col sm:flex-row gap-3 bg-white rounded-lg p-2 shadow-lg">
+                                <select
+                                    value={selectedCategory}
+                                    onChange={(e) => setSelectedCategory(e.target.value)}
+                                    className="px-4 py-3 text-gray-700 border-0 sm:border-r rounded-lg sm:rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                    <option value="">{t('search.allCategories')}</option>
+                                    {categories.map((cat) => (
+                                        <option key={cat.id} value={cat.id}>
+                                            {locale === 'en' ? cat.nameEn : cat.nameBg}
+                                        </option>
+                                    ))}
+                                </select>
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder={t('search.searchPlaceholder')}
+                                    className="flex-1 px-4 py-3 text-gray-700 border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                                <button
+                                    type="submit"
+                                    className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition flex items-center justify-center gap-2"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                    {t('common.search')}
+                                </button>
+                            </div>
+                        </form>
+
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <Link
                                 href="#posts"

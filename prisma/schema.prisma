@@ -83,27 +83,33 @@ model User {
 }
 
 model Post {
-  id             String     @id @default(cuid())
+  id             String       @id @default(cuid())
   title          String
-  description    String     @db.Text
+  description    String       @db.Text
   images         String[]
   price          Float?
-  isGallery      Boolean    @default(false)
-  isBoosted      Boolean    @default(false)
+  isGallery      Boolean      @default(false)
+  isBoosted      Boolean      @default(false)
   boostExpiresAt DateTime?
-  views          Int        @default(0)
+  views          Int          @default(0)
   authorId       String
-  author         User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  categoryId     String?
+  subcategoryId  String?
+  author         User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category       Category?    @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  subcategory    Subcategory? @relation(fields: [subcategoryId], references: [id], onDelete: SetNull)
   likes          Like[]
   comments       Comment[]
-  shares         Int        @default(0)
-  status         PostStatus @default(ACTIVE)
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
+  shares         Int          @default(0)
+  status         PostStatus   @default(ACTIVE)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
   @@index([authorId])
   @@index([createdAt])
   @@index([isBoosted])
+  @@index([categoryId])
+  @@index([subcategoryId])
 }
 
 enum PostStatus {
@@ -370,4 +376,45 @@ model StaticPage {
   updatedAt DateTime @updatedAt
 
   @@index([slug])
+}
+
+model Category {
+  id            String        @id @default(cuid())
+  nameEn        String
+  nameBg        String
+  slug          String        @unique
+  descriptionEn String?       @db.Text
+  descriptionBg String?       @db.Text
+  icon          String?
+  order         Int           @default(0)
+  isActive      Boolean       @default(true)
+  subcategories Subcategory[]
+  posts         Post[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([slug])
+  @@index([order])
+  @@index([isActive])
+}
+
+model Subcategory {
+  id            String   @id @default(cuid())
+  nameEn        String
+  nameBg        String
+  slug          String   @unique
+  descriptionEn String?  @db.Text
+  descriptionBg String?  @db.Text
+  categoryId    String
+  order         Int      @default(0)
+  isActive      Boolean  @default(true)
+  category      Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  posts         Post[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([slug])
+  @@index([categoryId])
+  @@index([order])
+  @@index([isActive])
 }
