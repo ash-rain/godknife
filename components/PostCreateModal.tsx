@@ -193,7 +193,7 @@ export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalP
                                 </p>
                             )}
                         </div>
-                        
+
                         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                             <h4 className="font-semibold text-blue-900 mb-2">
                                 {t('payment.buyMorePosts')}
@@ -212,7 +212,7 @@ export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalP
                                 {t('payment.buyPosts')}
                             </button>
                         </div>
-                        
+
                         <div className="flex justify-center">
                             <button
                                 onClick={onClose}
@@ -224,152 +224,152 @@ export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalP
                     </div>
                 ) : (
                     <form onSubmit={handleSubmit} className="p-6 space-y-4">
-                    {error && (
-                        <div className="bg-red-50 text-red-600 p-3 rounded-md">
-                            {error}
-                        </div>
-                    )}
+                        {error && (
+                            <div className="bg-red-50 text-red-600 p-3 rounded-md">
+                                {error}
+                            </div>
+                        )}
 
-                    <div>
-                        <label className="block text-sm font-medium mb-2">
-                            {t('post.title')} *
-                        </label>
-                        <input
-                            type="text"
-                            required
-                            value={formData.title}
-                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-2">
-                            {t('post.description')} *
-                        </label>
-                        <textarea
-                            required
-                            rows={4}
-                            value={formData.description}
-                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-2">
-                            {t('post.category')}
-                        </label>
-                        <select
-                            value={formData.categoryId}
-                            onChange={(e) => handleCategoryChange(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                        >
-                            <option value="">{t('post.selectCategory')}</option>
-                            {categories.map((cat) => (
-                                <option key={cat.id} value={cat.id}>
-                                    {locale === 'en' ? cat.nameEn : cat.nameBg}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    {formData.categoryId && subcategories.length > 0 && (
                         <div>
                             <label className="block text-sm font-medium mb-2">
-                                {t('post.subcategory')}
+                                {t('post.title')} *
+                            </label>
+                            <input
+                                type="text"
+                                required
+                                value={formData.title}
+                                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium mb-2">
+                                {t('post.description')} *
+                            </label>
+                            <textarea
+                                required
+                                rows={4}
+                                value={formData.description}
+                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium mb-2">
+                                {t('post.category')}
                             </label>
                             <select
-                                value={formData.subcategoryId}
-                                onChange={(e) => setFormData({ ...formData, subcategoryId: e.target.value })}
+                                value={formData.categoryId}
+                                onChange={(e) => handleCategoryChange(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                             >
-                                <option value="">{t('post.selectSubcategory')}</option>
-                                {subcategories.map((sub) => (
-                                    <option key={sub.id} value={sub.id}>
-                                        {locale === 'en' ? sub.nameEn : sub.nameBg}
+                                <option value="">{t('post.selectCategory')}</option>
+                                {categories.map((cat) => (
+                                    <option key={cat.id} value={cat.id}>
+                                        {locale === 'en' ? cat.nameEn : cat.nameBg}
                                     </option>
                                 ))}
                             </select>
                         </div>
-                    )}
 
-                    <div className="flex items-center space-x-4">
-                        <label className="flex items-center">
-                            <input
-                                type="checkbox"
-                                checked={formData.isGallery}
-                                onChange={(e) => setFormData({ ...formData, isGallery: e.target.checked, price: '' })}
-                                className="mr-2"
-                            />
-                            <span className="text-sm">{t('post.gallery')}</span>
-                        </label>
-                    </div>
+                        {formData.categoryId && subcategories.length > 0 && (
+                            <div>
+                                <label className="block text-sm font-medium mb-2">
+                                    {t('post.subcategory')}
+                                </label>
+                                <select
+                                    value={formData.subcategoryId}
+                                    onChange={(e) => setFormData({ ...formData, subcategoryId: e.target.value })}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                >
+                                    <option value="">{t('post.selectSubcategory')}</option>
+                                    {subcategories.map((sub) => (
+                                        <option key={sub.id} value={sub.id}>
+                                            {locale === 'en' ? sub.nameEn : sub.nameBg}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
 
-                    {!formData.isGallery && (
+                        <div className="flex items-center space-x-4">
+                            <label className="flex items-center">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.isGallery}
+                                    onChange={(e) => setFormData({ ...formData, isGallery: e.target.checked, price: '' })}
+                                    className="mr-2"
+                                />
+                                <span className="text-sm">{t('post.gallery')}</span>
+                            </label>
+                        </div>
+
+                        {!formData.isGallery && (
+                            <div>
+                                <label className="block text-sm font-medium mb-2">
+                                    {t('post.price')} (€)
+                                </label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    value={formData.price}
+                                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                />
+                            </div>
+                        )}
+
                         <div>
                             <label className="block text-sm font-medium mb-2">
-                                {t('post.price')} (€)
+                                {t('post.uploadImages')} * (Max 10)
                             </label>
                             <input
-                                type="number"
-                                step="0.01"
-                                value={formData.price}
-                                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={handleImageChange}
+                                className="w-full"
                             />
+
+                            <div className="grid grid-cols-3 gap-2 mt-4">
+                                {imagePreviews.map((preview, index) => (
+                                    <div key={index} className="relative">
+                                        <img
+                                            src={preview}
+                                            alt={`Preview ${index + 1}`}
+                                            className="w-full h-32 object-cover rounded"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => removeImage(index)}
+                                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1"
+                                        >
+                                            <X className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    )}
 
-                    <div>
-                        <label className="block text-sm font-medium mb-2">
-                            {t('post.uploadImages')} * (Max 10)
-                        </label>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onChange={handleImageChange}
-                            className="w-full"
-                        />
-
-                        <div className="grid grid-cols-3 gap-2 mt-4">
-                            {imagePreviews.map((preview, index) => (
-                                <div key={index} className="relative">
-                                    <img
-                                        src={preview}
-                                        alt={`Preview ${index + 1}`}
-                                        className="w-full h-32 object-cover rounded"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => removeImage(index)}
-                                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1"
-                                    >
-                                        <X className="h-4 w-4" />
-                                    </button>
-                                </div>
-                            ))}
+                        <div className="flex justify-end space-x-3 pt-4">
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
+                            >
+                                {t('common.cancel')}
+                            </button>
+                            <button
+                                type="submit"
+                                disabled={loading || images.length === 0}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                            >
+                                {loading ? t('common.loading') : t('post.publish')}
+                            </button>
                         </div>
-                    </div>
-
-                    <div className="flex justify-end space-x-3 pt-4">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
-                        >
-                            {t('common.cancel')}
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={loading || images.length === 0}
-                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
-                        >
-                            {loading ? t('common.loading') : t('post.publish')}
-                        </button>
-                    </div>
-                </form>
+                    </form>
                 )}
             </div>
         </div>

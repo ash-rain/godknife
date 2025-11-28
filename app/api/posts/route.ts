@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
         const isGallery = formData.get('isGallery') === 'true'
         const categoryIdRaw = formData.get('categoryId') as string | null
         const subcategoryIdRaw = formData.get('subcategoryId') as string | null
-        
+
         // Handle empty strings as null
         const categoryId = categoryIdRaw && categoryIdRaw.trim() !== '' ? categoryIdRaw : null
         const subcategoryId = subcategoryIdRaw && subcategoryIdRaw.trim() !== '' ? subcategoryIdRaw : null
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
             console.log('No images provided')
             return NextResponse.json({ error: 'At least one image is required' }, { status: 400 })
         }
-        
+
         if (imageFiles.length > 10) {
             return NextResponse.json({ error: 'Maximum 10 images allowed' }, { status: 400 })
         }

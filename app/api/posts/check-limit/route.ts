@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
         }
 
         const result = await canUserCreatePost(session.user.id)
-        
+
         return NextResponse.json(result)
     } catch (error) {
         console.error('Check post limit error:', error)
