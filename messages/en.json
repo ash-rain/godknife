@@ -211,7 +211,10 @@
     "limits": {
         "freePostLimit": "You've used your free post this week",
         "buyMorePosts": "Buy more posts to continue",
-        "nextFreePost": "Next free post available in"
+        "nextFreePost": "Next free post available on",
+        "postLimitReached": "Post Limit Reached",
+        "postsRemaining": "posts remaining",
+        "noPosts": "No posts remaining"
     },
     "errors": {
         "somethingWrong": "Something went wrong",

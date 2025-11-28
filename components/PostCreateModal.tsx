@@ -29,6 +29,10 @@ export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalP
     const { data: session } = useSession()
     const { t, locale } = useLanguage()
     const [loading, setLoading] = useState(false)
+    const [checkingLimit, setCheckingLimit] = useState(true)
+    const [canPost, setCanPost] = useState(true)
+    const [limitReason, setLimitReason] = useState('')
+    const [nextFreePostDate, setNextFreePostDate] = useState<string | null>(null)
     const [error, setError] = useState('')
     const [formData, setFormData] = useState({
         title: '',
@@ -43,9 +47,26 @@ export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalP
     const [categories, setCategories] = useState<Category[]>([])
     const [subcategories, setSubcategories] = useState<Subcategory[]>([])
 
-    useEffect(() => {
-        fetchCategories()
-    }, [])
+    const checkPostLimit = async () => {
+        try {
+            const response = await fetch('/api/posts/check-limit')
+            if (response.ok) {
+                const data = await response.json()
+                setCanPost(data.canPost)
+                if (!data.canPost) {
+                    setLimitReason(data.reason)
+                    if (data.nextFreePostDate) {
+                        const date = new Date(data.nextFreePostDate)
+                        setNextFreePostDate(date.toLocaleDateString(locale))
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error checking post limit:', error)
+        } finally {
+            setCheckingLimit(false)
+        }
+    }
 
     const fetchCategories = async () => {
         try {
@@ -58,6 +79,11 @@ export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalP
             console.error('Error fetching categories:', error)
         }
     }
+
+    useEffect(() => {
+        checkPostLimit()
+        fetchCategories()
+    }, [])
 
     const handleCategoryChange = (categoryId: string) => {
         setFormData({ ...formData, categoryId, subcategoryId: '' })
@@ -147,7 +173,57 @@ export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalP
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-6 space-y-4">
+                {checkingLimit ? (
+                    <div className="p-12 text-center">
+                        <div className="text-gray-600">{t('common.loading')}</div>
+                    </div>
+                ) : !canPost ? (
+                    <div className="p-6 space-y-6">
+                        <div className="text-center py-8">
+                            <div className="text-6xl mb-4">📝</div>
+                            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                                {t('limits.postLimitReached')}
+                            </h3>
+                            <p className="text-gray-600 mb-4">
+                                {t('limits.freePostLimit')}
+                            </p>
+                            {nextFreePostDate && (
+                                <p className="text-sm text-gray-500 mb-6">
+                                    {t('limits.nextFreePost')}: <span className="font-semibold">{nextFreePostDate}</span>
+                                </p>
+                            )}
+                        </div>
+                        
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                            <h4 className="font-semibold text-blue-900 mb-2">
+                                {t('payment.buyMorePosts')}
+                            </h4>
+                            <p className="text-blue-800 text-sm mb-4">
+                                {t('payment.postPackage')}
+                            </p>
+                            <button
+                                onClick={() => {
+                                    onClose()
+                                    // TODO: Open payment modal or navigate to payment page
+                                    window.location.href = '/#buy-posts'
+                                }}
+                                className="w-full bg-blue-600 text-white text-center px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+                            >
+                                {t('payment.buyPosts')}
+                            </button>
+                        </div>
+                        
+                        <div className="flex justify-center">
+                            <button
+                                onClick={onClose}
+                                className="px-6 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition"
+                            >
+                                {t('common.cancel')}
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <form onSubmit={handleSubmit} className="p-6 space-y-4">
                     {error && (
                         <div className="bg-red-50 text-red-600 p-3 rounded-md">
                             {error}
@@ -294,6 +370,7 @@ export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalP
                         </button>
                     </div>
                 </form>
+                )}
             </div>
         </div>
     )

@@ -41,10 +41,22 @@ export async function POST(req: NextRequest) {
         const description = formData.get('description') as string
         const price = formData.get('price') ? parseFloat(formData.get('price') as string) : undefined
         const isGallery = formData.get('isGallery') === 'true'
-        const categoryId = formData.get('categoryId') as string | null
-        const subcategoryId = formData.get('subcategoryId') as string | null
+        const categoryIdRaw = formData.get('categoryId') as string | null
+        const subcategoryIdRaw = formData.get('subcategoryId') as string | null
+        
+        // Handle empty strings as null
+        const categoryId = categoryIdRaw && categoryIdRaw.trim() !== '' ? categoryIdRaw : null
+        const subcategoryId = subcategoryIdRaw && subcategoryIdRaw.trim() !== '' ? subcategoryIdRaw : null
 
         console.log('Post data:', { title, description, price, isGallery, categoryId, subcategoryId })
+
+        // Validate required fields
+        if (!title || title.trim().length < 3) {
+            return NextResponse.json({ error: 'Title must be at least 3 characters' }, { status: 400 })
+        }
+        if (!description || description.trim().length < 10) {
+            return NextResponse.json({ error: 'Description must be at least 10 characters' }, { status: 400 })
+        }
 
         // Get all image files
         const imageFiles: File[] = []
@@ -57,6 +69,10 @@ export async function POST(req: NextRequest) {
         if (imageFiles.length === 0) {
             console.log('No images provided')
             return NextResponse.json({ error: 'At least one image is required' }, { status: 400 })
+        }
+        
+        if (imageFiles.length > 10) {
+            return NextResponse.json({ error: 'Maximum 10 images allowed' }, { status: 400 })
         }
 
         console.log('Processing', imageFiles.length, 'images')
@@ -72,7 +88,7 @@ export async function POST(req: NextRequest) {
         for (let i = 0; i < imageFiles.length; i++) {
             const file = imageFiles[i]
             console.log(`Processing image ${i + 1}/${imageFiles.length}:`, file.name, 'Size:', file.size)
-            
+
             const buffer = Buffer.from(await file.arrayBuffer())
             const filename = `${Date.now()}-${Math.random().toString(36).substring(7)}.jpg`
             console.log('Generated filename:', filename)
@@ -102,20 +118,21 @@ export async function POST(req: NextRequest) {
 
             uploadedImages.push(filename)
         }
-        
+
         console.log('All images uploaded:', uploadedImages)
 
         // Create post
+        console.log('Creating post in database...')
         const post = await prisma.post.create({
             data: {
-                title,
-                description,
-                price,
+                title: title.trim(),
+                description: description.trim(),
+                price: price || null,
                 isGallery,
                 images: uploadedImages,
                 authorId: session.user.id,
-                categoryId: categoryId || null,
-                subcategoryId: subcategoryId || null,
+                categoryId: categoryId,
+                subcategoryId: subcategoryId,
             },
             include: {
                 author: {
