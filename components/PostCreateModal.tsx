@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useLanguage } from './LanguageProvider'
 import { X } from 'lucide-react'
@@ -43,9 +43,9 @@ export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalP
     const [categories, setCategories] = useState<Category[]>([])
     const [subcategories, setSubcategories] = useState<Subcategory[]>([])
 
-    useState(() => {
+    useEffect(() => {
         fetchCategories()
-    })
+    }, [])
 
     const fetchCategories = async () => {
         try {
@@ -91,6 +91,9 @@ export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalP
         setError('')
 
         try {
+            console.log('Creating post with data:', formData)
+            console.log('Images:', images.length, 'files')
+
             const formDataToSend = new FormData()
             formDataToSend.append('title', formData.title)
             formDataToSend.append('description', formData.description)
@@ -106,21 +109,28 @@ export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalP
             }
 
             images.forEach((image, index) => {
+                console.log(`Appending image-${index}:`, image.name, image.size)
                 formDataToSend.append(`image-${index}`, image)
             })
 
+            console.log('Sending request to /api/posts...')
             const response = await fetch('/api/posts', {
                 method: 'POST',
                 body: formDataToSend,
             })
 
+            console.log('Response status:', response.status)
+            const data = await response.json()
+            console.log('Response data:', data)
+
             if (!response.ok) {
-                const data = await response.json()
                 throw new Error(data.error || 'Failed to create post')
             }
 
+            console.log('Post created successfully!')
             onSuccess()
         } catch (err: any) {
+            console.error('Error creating post:', err)
             setError(err.message)
         } finally {
             setLoading(false)
