@@ -5,9 +5,10 @@ import { prisma } from '@/lib/prisma'
 // PUT update category
 export async function PUT(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await params
         const session = await auth()
 
         if (!session?.user?.isAdmin) {
@@ -32,7 +33,7 @@ export async function PUT(
             where: {
                 slug,
                 NOT: {
-                    id: params.id,
+                    id: id,
                 },
             },
         })
@@ -44,12 +45,12 @@ export async function PUT(
         // Delete existing subcategories and recreate them
         await prisma.subcategory.deleteMany({
             where: {
-                categoryId: params.id,
+                categoryId: id,
             },
         })
 
         const category = await prisma.category.update({
-            where: { id: params.id },
+            where: { id: id },
             data: {
                 nameEn,
                 nameBg,
@@ -86,9 +87,10 @@ export async function PUT(
 // DELETE category
 export async function DELETE(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await params
         const session = await auth()
 
         if (!session?.user?.isAdmin) {
@@ -97,7 +99,7 @@ export async function DELETE(
 
         // Check if category has posts
         const category = await prisma.category.findUnique({
-            where: { id: params.id },
+            where: { id: id },
             include: {
                 _count: {
                     select: {
@@ -122,7 +124,7 @@ export async function DELETE(
 
         // Delete category (subcategories will be cascade deleted)
         await prisma.category.delete({
-            where: { id: params.id },
+            where: { id: id },
         })
 
         return NextResponse.json({ success: true })
