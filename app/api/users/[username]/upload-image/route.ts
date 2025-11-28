@@ -39,13 +39,21 @@ export async function POST(
         }
 
         // Initialize MinIO bucket
+        console.log('Initializing MinIO bucket:', BUCKET_NAME)
+        console.log('MinIO config:', {
+            endpoint: process.env.MINIO_ENDPOINT,
+            port: process.env.MINIO_PORT,
+            useSSL: process.env.MINIO_USE_SSL,
+        })
         await initializeBucket()
+        console.log('Bucket initialized successfully')
 
         // Convert file to buffer
         const buffer = Buffer.from(await file.arrayBuffer())
         const filename = `${type}-${Date.now()}-${Math.random()
             .toString(36)
             .substring(7)}.jpg`
+        console.log('Uploading file:', filename, 'Size:', buffer.length)
 
         // Upload original image
         await minioClient.putObject(BUCKET_NAME, filename, buffer, buffer.length, {
@@ -93,8 +101,9 @@ export async function POST(
         })
     } catch (error) {
         console.error('Upload image error:', error)
+        const errorMessage = error instanceof Error ? error.message : 'Internal server error'
         return NextResponse.json(
-            { error: 'Internal server error' },
+            { error: errorMessage, details: String(error) },
             { status: 500 }
         )
     }
