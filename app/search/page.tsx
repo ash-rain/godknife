@@ -31,11 +31,20 @@ interface Post {
     }
 }
 
+interface Subcategory {
+    id: string
+    nameEn: string
+    nameBg: string
+    slug: string
+    categoryId: string
+}
+
 interface Category {
     id: string
     nameEn: string
     nameBg: string
     slug: string
+    subcategories?: Subcategory[]
 }
 
 function SearchResults() {
@@ -48,6 +57,7 @@ function SearchResults() {
 
     const search = searchParams.get('q') || ''
     const categoryId = searchParams.get('category') || ''
+    const subcategoryId = searchParams.get('subcategory') || ''
     const sort = searchParams.get('sort') || 'newest'
 
     useEffect(() => {
@@ -56,7 +66,7 @@ function SearchResults() {
 
     useEffect(() => {
         fetchPosts()
-    }, [search, categoryId, sort])
+    }, [search, categoryId, subcategoryId, sort])
 
     const fetchCategories = async () => {
         try {
@@ -76,6 +86,7 @@ function SearchResults() {
             const params = new URLSearchParams()
             if (search) params.append('search', search)
             if (categoryId) params.append('categoryId', categoryId)
+            if (subcategoryId) params.append('subcategoryId', subcategoryId)
             params.append('sort', sort)
 
             const response = await fetch(`/api/posts?${params}`)
@@ -90,6 +101,7 @@ function SearchResults() {
     }
 
     const selectedCategory = categories.find(c => c.id === categoryId)
+    const selectedSubcategory = selectedCategory?.subcategories?.find(s => s.id === subcategoryId)
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -112,13 +124,18 @@ function SearchResults() {
                                 {locale === 'en' ? selectedCategory.nameEn : selectedCategory.nameBg}
                             </span>
                         )}
+                        {selectedSubcategory && (
+                            <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">
+                                {locale === 'en' ? selectedSubcategory.nameEn : selectedSubcategory.nameBg}
+                            </span>
+                        )}
                     </div>
                 </div>
 
                 {/* Sort Options */}
                 <div className="flex gap-4 mb-6">
                     <a
-                        href={`/search?q=${search}&category=${categoryId}&sort=newest`}
+                        href={`/search?q=${search}&category=${categoryId}&subcategory=${subcategoryId}&sort=newest`}
                         className={`px-4 py-2 rounded-lg ${sort === 'newest'
                             ? 'bg-blue-600 text-white'
                             : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -127,7 +144,7 @@ function SearchResults() {
                         {t('home.newest')}
                     </a>
                     <a
-                        href={`/search?q=${search}&category=${categoryId}&sort=hottest`}
+                        href={`/search?q=${search}&category=${categoryId}&subcategory=${subcategoryId}&sort=hottest`}
                         className={`px-4 py-2 rounded-lg ${sort === 'hottest'
                             ? 'bg-blue-600 text-white'
                             : 'bg-white text-gray-700 hover:bg-gray-100'
@@ -136,7 +153,7 @@ function SearchResults() {
                         🔥 {t('home.hottest')}
                     </a>
                     <a
-                        href={`/search?q=${search}&category=${categoryId}&sort=boosted`}
+                        href={`/search?q=${search}&category=${categoryId}&subcategory=${subcategoryId}&sort=boosted`}
                         className={`px-4 py-2 rounded-lg ${sort === 'boosted'
                             ? 'bg-blue-600 text-white'
                             : 'bg-white text-gray-700 hover:bg-gray-100'

@@ -83,13 +83,14 @@
         "selectSubcategory": "Избери подкатегория"
     },
     "search": {
-        "searchResults": "Резултати от търсенето",
+        "searchResults": "Резултати от търсене",
         "query": "Търсене",
         "allCategories": "Всички категории",
+        "allSubcategories": "Всички подкатегории",
         "searchPlaceholder": "Търси ножове...",
         "resultsFound": "намерени резултата",
         "noResults": "Няма намерени резултати",
-        "tryDifferentSearch": "Опитайте да промените критериите за търсене или филтрите"
+        "tryDifferentSearch": "Опитайте да промените условията или филтрите за търсене"
     },
     "profile": {
         "editProfile": "Редактирай профил",
