@@ -347,7 +347,7 @@ export default function MessagesPage() {
                                     {/* User Info */}
                                     {getOtherParticipant(selectedConversation)?.username ? (
                                         <Link
-                                            href={`/users/${getOtherParticipant(selectedConversation)!.username}`}
+                                            href={`/u/${getOtherParticipant(selectedConversation)!.username}`}
                                             className="flex items-center gap-3 hover:opacity-80 transition"
                                         >
                                             <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">

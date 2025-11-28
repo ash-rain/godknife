@@ -133,7 +133,7 @@ export default function Navigation({ onCreatePost }: NavigationProps) {
                             >
                                 <button className="flex items-center space-x-2">
                                     <img
-                                        src={session.user?.image || '/default-avatar.png'}
+                                        src={session.user?.image || '/placeholder-user.jpg'}
                                         alt="Profile"
                                         className="h-8 w-8 rounded-full"
                                     />

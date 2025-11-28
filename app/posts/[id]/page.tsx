@@ -415,7 +415,7 @@ export default function PostDetailPage() {
                                     <div className="flex items-center justify-between">
                                         {post.author.username ? (
                                             <Link
-                                                href={`/users/${post.author.username}`}
+                                                href={`/u/${post.author.username}`}
                                                 className="flex items-center gap-3 hover:opacity-80 transition"
                                             >
                                                 <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden shrink-0">
@@ -545,7 +545,7 @@ export default function PostDetailPage() {
                                                             </span>
                                                             {comment.user.username ? (
                                                                 <Link
-                                                                    href={`/users/${comment.user.username}`}
+                                                                    href={`/u/${comment.user.username}`}
                                                                     className="text-gray-500 text-sm hover:text-blue-600 hover:underline"
                                                                 >
                                                                     @{comment.user.username}
