@@ -4,20 +4,32 @@ import { addPostCredits } from '@/lib/post-limits'
 import Stripe from 'stripe'
 import { addDays } from 'date-fns'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: '2025-11-17.clover',
-})
-
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
+const getStripeClient = () => {
+    if (!process.env.STRIPE_SECRET_KEY) {
+        throw new Error('STRIPE_SECRET_KEY is not configured')
+    }
+    return new Stripe(process.env.STRIPE_SECRET_KEY, {
+        apiVersion: '2025-11-17.clover',
+    })
+}
 
 export async function POST(req: NextRequest) {
     try {
+        const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
+        if (!webhookSecret) {
+            return NextResponse.json(
+                { error: 'Webhook secret not configured' },
+                { status: 500 }
+            )
+        }
+
         const body = await req.text()
         const signature = req.headers.get('stripe-signature')!
 
         let event: Stripe.Event
 
         try {
+            const stripe = getStripeClient()
             event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
         } catch (err: any) {
             console.error('Webhook signature verification failed:', err.message)
