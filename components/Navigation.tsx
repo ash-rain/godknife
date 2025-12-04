@@ -3,18 +3,16 @@
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { useLanguage } from './LanguageProvider'
+import { usePostCreate } from './PostCreateProvider'
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { Menu, X, MessageSquare, User, Settings, LogOut, Home, Plus, Users } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useNotifications } from '@/hooks/usePusher'
 
-interface NavigationProps {
-    onCreatePost?: () => void
-}
-
-export default function Navigation({ onCreatePost }: NavigationProps) {
+export default function Navigation() {
     const { data: session } = useSession()
     const { t, language, setLanguage } = useLanguage()
+    const { openModal } = usePostCreate()
     const router = useRouter()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [profileMenuOpen, setProfileMenuOpen] = useState(false)
@@ -48,8 +46,8 @@ export default function Navigation({ onCreatePost }: NavigationProps) {
     const handleCreatePost = () => {
         if (!session) {
             router.push('/auth/signin')
-        } else if (onCreatePost) {
-            onCreatePost()
+        } else {
+            openModal()
         }
     }
 

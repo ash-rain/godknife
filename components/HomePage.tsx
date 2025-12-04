@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useLanguage } from '@/components/LanguageProvider'
+import { usePostCreate } from '@/components/PostCreateProvider'
 import Navigation from '@/components/Navigation'
 import PostCard from '@/components/PostCard'
-import PostCreateModal from '@/components/PostCreateModal'
 import Link from 'next/link'
 
 interface Post {
@@ -45,10 +45,10 @@ interface Category {
 export default function HomePage() {
     const { data: session } = useSession()
     const { t, locale } = useLanguage()
+    const { openModal, setOnPostCreated } = usePostCreate()
     const [posts, setPosts] = useState<Post[]>([])
     const [loading, setLoading] = useState(true)
     const [sort, setSort] = useState<'newest' | 'hottest' | 'boosted'>('boosted')
-    const [showCreateModal, setShowCreateModal] = useState(false)
     const [heroContent, setHeroContent] = useState<HeroContent | null>(null)
     const [categories, setCategories] = useState<Category[]>([])
     const [searchQuery, setSearchQuery] = useState('')
@@ -61,6 +61,12 @@ export default function HomePage() {
         fetchCategories()
         fetchPosts()
     }, [sort, locale])
+
+    // Set up post creation callback for this page
+    useEffect(() => {
+        setOnPostCreated(() => fetchPosts)
+        return () => setOnPostCreated(undefined)
+    }, [])
 
     const fetchHeroContent = async () => {
         try {
@@ -126,7 +132,7 @@ export default function HomePage() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <Navigation onCreatePost={() => setShowCreateModal(true)} />
+            <Navigation />
 
             {/* Hero Section */}
             <div className="bg-linear-to-r from-blue-600 to-blue-800 text-white">
@@ -198,7 +204,7 @@ export default function HomePage() {
                             </Link>
                             {session && (
                                 <button
-                                    onClick={() => setShowCreateModal(true)}
+                                    onClick={openModal}
                                     className="px-8 py-3 bg-blue-700 text-white rounded-lg font-semibold hover:bg-blue-800 transition border-2 border-white"
                                 >
                                     {t('pages.hero.sellYourKnife')}
@@ -278,7 +284,7 @@ export default function HomePage() {
                         </p>
                         {session && (
                             <button
-                                onClick={() => setShowCreateModal(true)}
+                                onClick={openModal}
                                 className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition inline-flex items-center gap-2"
                             >
                                 <svg
@@ -300,16 +306,6 @@ export default function HomePage() {
                     </div>
                 )}
             </main>
-
-            {showCreateModal && (
-                <PostCreateModal
-                    onClose={() => setShowCreateModal(false)}
-                    onSuccess={() => {
-                        setShowCreateModal(false)
-                        fetchPosts()
-                    }}
-                />
-            )}
         </div>
     )
 }

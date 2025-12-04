@@ -3,9 +3,9 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useLanguage } from '@/components/LanguageProvider'
+import { usePostCreate } from '@/components/PostCreateProvider'
 import Navigation from '@/components/Navigation'
 import PostCard from '@/components/PostCard'
-import PostCreateModal from '@/components/PostCreateModal'
 
 interface Post {
     id: string
@@ -50,10 +50,10 @@ interface Category {
 function SearchResults() {
     const searchParams = useSearchParams()
     const { t, locale } = useLanguage()
+    const { setOnPostCreated } = usePostCreate()
     const [posts, setPosts] = useState<Post[]>([])
     const [categories, setCategories] = useState<Category[]>([])
     const [loading, setLoading] = useState(true)
-    const [showCreateModal, setShowCreateModal] = useState(false)
 
     const search = searchParams.get('q') || ''
     const categoryId = searchParams.get('category') || ''
@@ -67,6 +67,18 @@ function SearchResults() {
     useEffect(() => {
         fetchPosts()
     }, [search, categoryId, subcategoryId, sort])
+
+    // Set up post creation callback for this page
+    useEffect(() => {
+        setOnPostCreated(() => fetchPosts)
+        return () => setOnPostCreated(undefined)
+    }, [])
+
+    // Set up post creation callback for this page
+    useEffect(() => {
+        setOnPostCreated(() => fetchPosts)
+        return () => setOnPostCreated(undefined)
+    }, [])
 
     const fetchCategories = async () => {
         try {
@@ -105,7 +117,7 @@ function SearchResults() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <Navigation onCreatePost={() => setShowCreateModal(true)} />
+            <Navigation />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Search Header */}
@@ -208,16 +220,6 @@ function SearchResults() {
                     </div>
                 )}
             </main>
-
-            {showCreateModal && (
-                <PostCreateModal
-                    onClose={() => setShowCreateModal(false)}
-                    onSuccess={() => {
-                        setShowCreateModal(false)
-                        fetchPosts()
-                    }}
-                />
-            )}
         </div>
     )
 }
