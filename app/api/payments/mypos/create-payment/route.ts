@@ -14,16 +14,28 @@ export async function POST(req: NextRequest) {
         }
 
         const body = await req.json()
-        const { type, postId } = body
+        const { type, quantity: requestedQuantity, postId } = body
 
         let amount: number
         let quantity: number
         let description: string
 
         if (type === 'POST_CREDITS') {
-            amount = parseFloat(process.env.POST_PURCHASE_PRICE || '5')
-            quantity = 5
-            description = '5 Post Credits'
+            const pricePerCredit = parseFloat(process.env.POST_PURCHASE_PRICE || '1')
+            quantity = requestedQuantity || 5
+
+            // Apply discounts for bulk purchases
+            let discountMultiplier = 1
+            if (quantity >= 50) {
+                discountMultiplier = 0.7 // 30% discount
+            } else if (quantity >= 20) {
+                discountMultiplier = 0.8 // 20% discount
+            } else if (quantity >= 10) {
+                discountMultiplier = 0.9 // 10% discount
+            }
+
+            amount = quantity * pricePerCredit * discountMultiplier
+            description = `${quantity} Post Credits`
         } else if (type === 'BOOST') {
             if (!postId) {
                 return NextResponse.json(

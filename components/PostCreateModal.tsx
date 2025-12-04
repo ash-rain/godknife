@@ -204,8 +204,7 @@ export default function PostCreateModal({ onClose, onSuccess }: PostCreateModalP
                             <button
                                 onClick={() => {
                                     onClose()
-                                    // TODO: Open payment modal or navigate to payment page
-                                    window.location.href = '/#buy-posts'
+                                    window.location.href = '/payment/buy-credits'
                                 }}
                                 className="w-full bg-blue-600 text-white text-center px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
                             >

@@ -56,6 +56,7 @@ docker-compose restart minio
 | Service | URL | Credentials |
 |---------|-----|-------------|
 | App | http://localhost:3000 | - |
+| Buy Credits | http://localhost:3000/payment/buy-credits | - |
 | MinIO Console | http://localhost:9001 | godknife / godknife_password |
 | Prisma Studio | http://localhost:5555 | - |
 | PostgreSQL | localhost:5432 | godknife / godknife_password |
@@ -176,6 +177,25 @@ docker exec -it godknife-postgres psql -U godknife -d godknife
 - Facebook: Configure in Facebook Developers
 
 ## 💰 Payment Testing
+
+### Stripe (Recommended)
+Test cards:
+- **Success**: 4242 4242 4242 4242
+- **Decline**: 4000 0000 0000 0002
+- Any future expiry, any 3-digit CVC
+
+Setup:
+1. Get keys from https://dashboard.stripe.com/apikeys
+2. Add to `.env`:
+   ```env
+   STRIPE_SECRET_KEY=sk_test_...
+   STRIPE_PUBLISHABLE_KEY=pk_test_...
+   STRIPE_WEBHOOK_SECRET=whsec_...
+   ```
+3. For local webhook testing:
+   ```bash
+   stripe listen --forward-to localhost:3000/api/payments/stripe/webhook
+   ```
 
 ### PayPal Sandbox
 1. Create sandbox account at https://developer.paypal.com
