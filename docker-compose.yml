@@ -25,6 +25,7 @@ services:
       MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-godknife}
       MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-godknife_password}
       MINIO_SERVER_URL: ${MINIO_SERVER_URL:-http://localhost:9009} 
+      MINIO_BROWSER_REDIRECT_URL: ${MINIO_SERVER_URL:-http://localhost:9009}
     ports:
       - "9009:9000"
       - "9001:9001"
@@ -43,7 +44,7 @@ services:
       MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME:-godknife-images}
     entrypoint: >
       /bin/sh -c "
-      until /usr/bin/mc config host add myminio http://minio:9000 $${MINIO_ACCESS_KEY} $${MINIO_SECRET_KEY}; do echo '...waiting...' && sleep 1; done;
+      until /usr/bin/mc config host add myminio ${MINIO_SERVER_URL:-http://localhost:9009} $${MINIO_ACCESS_KEY} $${MINIO_SECRET_KEY}; do echo '...waiting...' && sleep 1; done;
       /usr/bin/mc mb -p myminio/$${MINIO_BUCKET_NAME};
       /usr/bin/mc anonymous set public myminio/$${MINIO_BUCKET_NAME};
       exit 0;
