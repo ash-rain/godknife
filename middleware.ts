@@ -7,18 +7,16 @@ export async function middleware(request: NextRequest) {
     const token = await getToken({
         req: request,
         secret: process.env.NEXTAUTH_SECRET,
-        // Specify the cookie name explicitly to match NextAuth behavior
+        // NextAuth v5 uses 'authjs' prefix instead of 'next-auth'
         cookieName: process.env.NODE_ENV === 'production'
-            ? '__Secure-next-auth.session-token'
-            : 'next-auth.session-token'
+            ? '__Secure-authjs.session-token'
+            : 'authjs.session-token'
     })
 
     const isAuth = !!token
     const isAuthPage = request.nextUrl.pathname.startsWith('/auth')
     const isAdminPage = request.nextUrl.pathname.startsWith('/admin')
-    const isApiAdminRoute = request.nextUrl.pathname.startsWith('/api/admin')
-
-    // Redirect authenticated users away from auth pages
+    const isApiAdminRoute = request.nextUrl.pathname.startsWith('/api/admin')    // Redirect authenticated users away from auth pages
     if (isAuthPage) {
         if (isAuth) {
             return NextResponse.redirect(new URL('/', request.url))
@@ -32,13 +30,11 @@ export async function middleware(request: NextRequest) {
             return NextResponse.redirect(new URL('/auth/signin', request.url))
         }
 
-        // Check if user is admin (you'll need to add this to the token)
+        // Check if user is admin
         if (!token.isAdmin) {
             return NextResponse.redirect(new URL('/', request.url))
         }
-    }
-
-    return NextResponse.next()
+    } return NextResponse.next()
 }
 
 export const config = {

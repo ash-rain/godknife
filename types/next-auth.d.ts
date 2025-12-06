@@ -6,6 +6,7 @@ declare module "next-auth" {
             id: string
             username?: string | null
             isAdmin?: boolean
+            isModerator?: boolean
             postCredits?: number
         } & DefaultSession["user"]
     }
@@ -13,6 +14,7 @@ declare module "next-auth" {
     interface User {
         username?: string | null
         isAdmin?: boolean
+        isModerator?: boolean
         postCredits?: number
     }
 }
@@ -22,6 +24,7 @@ declare module "next-auth/jwt" {
         id: string
         username?: string | null
         isAdmin?: boolean
+        isModerator?: boolean
         postCredits?: number
     }
 }

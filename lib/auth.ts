@@ -137,13 +137,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 token.id = user.id as string
             }
 
-            // Fetch user's admin status and add to token
+            // Fetch user's admin status, moderator status, username, and credits
             if (token.id) {
                 const userData = await prisma.user.findUnique({
                     where: { id: token.id as string },
-                }) as any
+                    select: {
+                        isAdmin: true,
+                        isModerator: true,
+                        username: true,
+                        postCredits: true,
+                    }
+                })
                 if (userData) {
                     token.isAdmin = userData.isAdmin
+                    token.isModerator = userData.isModerator
+                    token.username = userData.username
+                    token.postCredits = userData.postCredits
                 }
             }
 
@@ -172,6 +181,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     }
 
                     session.user.isAdmin = userData.isAdmin
+                    session.user.isModerator = userData.isModerator
                     session.user.postCredits = userData.postCredits
                 }
             }
