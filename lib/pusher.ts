@@ -12,12 +12,24 @@ export const pusherServer = new Pusher({
 })
 
 export function getPusherClient() {
-    return new PusherClient(process.env.NEXT_PUBLIC_PUSHER_KEY || 'godknife-key', {
-        wsHost: process.env.NEXT_PUBLIC_PUSHER_HOST || 'localhost',
-        wsPort: parseInt(process.env.NEXT_PUBLIC_PUSHER_PORT || '6001'),
-        forceTLS: process.env.NEXT_PUBLIC_PUSHER_USE_TLS === 'true',
+    const useTLS = process.env.NEXT_PUBLIC_PUSHER_USE_TLS === 'true'
+    const host = process.env.NEXT_PUBLIC_PUSHER_HOST || 'localhost'
+    const port = process.env.NEXT_PUBLIC_PUSHER_PORT || '6001'
+
+    // For production with TLS on standard port 443, don't specify wsPort
+    // For local development or non-standard ports, specify wsPort
+    const config: any = {
+        wsHost: host,
+        forceTLS: useTLS,
         disableStats: true,
         enabledTransports: ['ws', 'wss'],
         cluster: 'mt1', // Required by type but not used with custom wsHost
-    })
+    }
+
+    // Only add wsPort if not using standard TLS port (443) or standard WS port (80)
+    if (!(useTLS && port === '443') && !(!useTLS && port === '80')) {
+        config.wsPort = parseInt(port)
+    }
+
+    return new PusherClient(process.env.NEXT_PUBLIC_PUSHER_KEY || 'godknife-key', config)
 }
